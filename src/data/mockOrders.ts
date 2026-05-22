@@ -1,0 +1,70 @@
+export type OrderItem = {
+  name: string;
+  qty: number;
+  price: number;
+};
+
+export type Order = {
+  id: string;
+  table: string;
+  server: string;
+  items: OrderItem[];
+  total: number;
+  status: string;
+  time: string;
+  guests: number;
+};
+
+export const ORDER_STATUSES = ['All', 'Pending', 'Preparing', 'Ready', 'Served', 'Cancelled'];
+
+export const INITIAL_ORDERS: Order[] = [
+  { 
+    id: 'ORD-1041', table: 'Table 3',  server: 'Julian R.',  
+    items: [
+      { name: 'Wagyu Burger', qty: 2, price: 28.00 },
+      { name: 'Truffle Fries', qty: 1, price: 9.00 },
+      { name: 'Cabernet Sauvignon', qty: 2, price: 14.00 }
+    ], 
+    total: 107.00,  status: 'Preparing', time: '2m ago',  guests: 2 
+  },
+  { 
+    id: 'ORD-1040', table: 'Table 7',  server: 'Derrick S.', 
+    items: [
+      { name: 'Ribeye Steak', qty: 1, price: 52.00 },
+      { name: 'Burrata Salad', qty: 1, price: 16.00 },
+      { name: 'Lava Cake', qty: 1, price: 12.00 }
+    ], 
+    total: 80.00, status: 'Ready',     time: '8m ago',  guests: 1 
+  },
+  { 
+    id: 'ORD-1039', table: 'Bar-01',   server: 'Marco V.',   
+    items: [
+      { name: 'Craft Lager', qty: 3, price: 8.00 },
+      { name: 'Espresso Martini', qty: 2, price: 13.00 }
+    ], 
+    total: 50.00,  status: 'Served',    time: '14m ago', guests: 3 
+  },
+  { 
+    id: 'ORD-1038', table: 'Table 12', server: 'Julian R.',  
+    items: [
+      { name: 'Miso Cod', qty: 1, price: 32.00 },
+      { name: 'Tuna Tartare', qty: 1, price: 18.50 }
+    ], 
+    total: 50.50,  status: 'Pending',   time: '1m ago',  guests: 2 
+  },
+  { 
+    id: 'ORD-1037', table: 'Table 5',  server: 'Derrick S.', 
+    items: [
+      { name: 'Truffle Pasta', qty: 2, price: 24.50 },
+      { name: 'Crème Brûlée', qty: 1, price: 11.00 }
+    ], 
+    total: 60.00, status: 'Preparing', time: '5m ago',  guests: 2 
+  },
+  { 
+    id: 'ORD-1036', table: 'Table 9',  server: 'Marco V.',   
+    items: [
+      { name: 'Wagyu Burger', qty: 1, price: 28.00 }
+    ], 
+    total: 28.00,  status: 'Cancelled', time: '20m ago', guests: 1 
+  },
+];

@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+
+  /* ── DARK: deep warm charcoal + bright yellow accent ── */
+  --color-surface:                  #141210;
+  --color-surface-container-lowest: #0e0c0a;
+  --color-surface-container-low:    #1c1916;
+  --color-surface-container-high:   #252118;
+  --color-surface-container-highest:#2e291f;
+  --color-surface-bright:           #38322a;
+  --color-surface-variant:          #211e16;
+
+  --color-on-surface:               #f5f0e8;
+  --color-on-surface-variant:       #9a9080;
+
+  --color-primary:                  #fde047;
+  --color-primary-container:        #ca8a04;
+  --color-on-primary-container:     #1a1200;
+
+  --color-secondary:                #4ade80;
+  --color-secondary-container:      #14532d;
+  --color-on-secondary-container:   #dcfce7;
+
+  --color-tertiary:                 #fb923c;
+  --color-tertiary-container:       #7c2d12;
+
+  --color-error:                    #f87171;
+  --color-error-container:          #7f1d1d;
+
+  --color-outline:                  #4a4030;
+  --color-outline-variant:          #2a2418;
+}
+
+.light {
+  /* ── LIGHT: white base + light yellow accent ── */
+  --color-surface:                  #fafaf8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low:    #ffffff;
+  --color-surface-container-high:   #f5f5f0;
+  --color-surface-container-highest:#eeede8;
+  --color-surface-bright:           #e8e7e1;
+  --color-surface-variant:          #f8f8f4;
+
+  /* Text: soft charcoal — readable, not harsh black */
+  --color-on-surface:               #27272a;
+  --color-on-surface-variant:       #71717a;
+
+  /* PRIMARY: bright light yellow — used on buttons, icons, active states */
+  --color-primary:                  #eab308;
+  --color-primary-container:        #fef08a;
+  --color-on-primary-container:     #1a1200;
+
+  --color-secondary:                #16a34a;
+  --color-secondary-container:      #dcfce7;
+  --color-on-secondary-container:   #052e16;
+
+  --color-tertiary:                 #ea580c;
+  --color-tertiary-container:       #ffedd5;
+
+  --color-error:                    #dc2626;
+  --color-error-container:          #fee2e2;
+
+  --color-outline:                  #d4d4d8;
+  --color-outline-variant:          #e4e4e7;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* White sidebar + topbar with clean shadow in light mode */
+  .light aside,
+  .light header {
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 1px #e4e4e7, 0 2px 16px 0 rgb(0 0 0 / 0.06);
+  }
+}
+
+.floor-grid {
+  background-image: radial-gradient(circle, #38322a 1.5px, transparent 1.5px);
+  background-size: 36px 36px;
+}
+.light .floor-grid {
+  background-image: radial-gradient(circle, #d4d4d8 1.5px, transparent 1.5px);
+}
+
+.drag-region { -webkit-app-region: drag; }
+.no-drag     { -webkit-app-region: no-drag; }
+
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-outline); border-radius: 99px; }
+
+/* ── PRINT STYLES ── */
+@media print {
+  /* Hide UI elements that shouldn't be printed */
+  header, aside, .no-print {
+    display: none !important;
+  }
+
+  html, body, #root, main, .bill-slip-screen {
+    height: auto !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  /* Position the receipt */
+  .receipt-container {
+    position: relative;
+    margin: 0 auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  @page {
+    margin: 0.5cm;
+    size: auto;
+  }
+
+  /* Ensure colors and backgrounds print correctly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
