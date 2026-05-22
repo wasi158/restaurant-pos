@@ -50,8 +50,8 @@ export function SupportScreen() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
           { icon: MessageCircle, label: 'Live Chat',    desc: 'Chat with support',      action: 'Start Chat',    color: 'text-primary',   bg: 'bg-primary/10'   },
-          { icon: Mail,          label: 'Email Support',desc: 'support@kineticdarkroom.com', action: 'Send Email', color: 'text-secondary', bg: 'bg-secondary/10' },
-          { icon: Phone,         label: 'Phone Support',desc: '+1 800-KD-HELP',         action: 'Call Now',      color: 'text-tertiary',  bg: 'bg-tertiary/10'  },
+          { icon: Mail,          label: 'Email Support',desc: 'support@restaurant-pos.com', action: 'Send Email', color: 'text-secondary', bg: 'bg-secondary/10' },
+          { icon: Phone,         label: 'Phone Support',desc: '+1 800-POS-HELP',            action: 'Call Now',      color: 'text-tertiary',  bg: 'bg-tertiary/10'  },
         ].map((c, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
             className="bg-surface-container-high rounded-2xl p-5 border border-outline-variant hover:border-primary/30 transition-all group">

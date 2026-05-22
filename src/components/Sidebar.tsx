@@ -42,7 +42,7 @@ export function Sidebar({ activeTab, setActiveTab, onSendToKitchen }: SidebarPro
             <ChefHat className="w-5 h-5 text-on-primary-container" />
           </div>
           <div>
-            <p className="text-sm font-bold text-on-surface font-headline leading-none">Kinetic Darkroom</p>
+            <p className="text-sm font-bold text-on-surface font-headline leading-none">Restaurant POS</p>
             <p className="text-[10px] text-on-surface-variant mt-0.5 tracking-widest uppercase">Admin Terminal</p>
           </div>
         </div>

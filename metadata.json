@@ -1,5 +1,5 @@
 {
-  "name": "The Kinetic Darkroom",
-  "description": "A professional restaurant POS and management terminal with floor plans, inventory, staff management, and analytics.",
-  "requestFramePermissions": []
+	"name": "Restaurant POS",
+	"description": "A professional restaurant POS and management terminal with floor plans, inventory, staff management, and analytics.",
+	"requestFramePermissions": []
 }

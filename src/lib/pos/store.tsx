@@ -19,10 +19,10 @@ import { convertQty } from './units';
 import { isDishCategory } from './constants';
 import { computeOrderPricing } from './promotionPricing';
 
-const STORAGE_KEY = 'kd.pos.v1';
+const STORAGE_KEY = 'restaurant-pos.pos.v1';
 
 /** Sentinel: if still present after dispatch, the reducer did not fill `resultRef` (should not happen). */
-const PLACE_RESULT_PENDING = '__KD_POS_PLACE_PENDING__';
+const PLACE_RESULT_PENDING = '__RESTAURANT_POS_PLACE_PENDING__';
 
 function uid(prefix: string) {
   return `${prefix}-${Math.random().toString(16).slice(2)}-${Date.now().toString(16)}`;

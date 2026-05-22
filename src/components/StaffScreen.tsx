@@ -54,7 +54,7 @@ function StaffModal({ title, onClose, onSave, form, setForm }: {
             </div>
             <div>
               <label className="text-xs font-semibold text-on-surface-variant mb-1.5 block">Email</label>
-              <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="name@kd.com"
+              <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="name@restaurant-pos.com"
                 className="w-full bg-surface-container-high border border-outline-variant rounded-xl px-3 py-2.5 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" />
             </div>
             <div>

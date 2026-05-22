@@ -101,12 +101,12 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
         >
           {/* Header */}
           <div className="text-center space-y-2 border-b-2 border-dashed border-slate-200 pb-6 mb-6">
-            <h1 className="text-2xl font-black tracking-tighter uppercase italic">Kinetic Darkroom</h1>
-            <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Premium Gastrolounge</p>
+            <h1 className="text-2xl font-black tracking-tighter uppercase italic">Restaurant POS</h1>
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Restaurant Point of Sale</p>
             <div className="flex flex-col gap-1 mt-4 text-[10px] text-slate-400 font-bold uppercase">
               <span className="flex items-center justify-center gap-1"><MapPin className="w-3 h-3" /> 124 Science Park, London</span>
               <span className="flex items-center justify-center gap-1"><Phone className="w-3 h-3" /> +44 20 7946 0124</span>
-              <span className="flex items-center justify-center gap-1"><Globe className="w-3 h-3" /> kinetic-darkroom.com</span>
+              <span className="flex items-center justify-center gap-1"><Globe className="w-3 h-3" /> restaurant-pos.com</span>
             </div>
           </div>
 

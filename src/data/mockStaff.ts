@@ -8,10 +8,10 @@ export type StaffMember = {
 export const STAFF_ROLES = ['Head Waiter', 'Waiter', 'Executive Chef', 'Sous Chef', 'Head Cashier', 'Cashier', 'Host', 'Bartender', 'Manager'];
 
 export const INITIAL_STAFF: StaffMember[] = [
-  { id: 'EMP-9234', name: 'Julian Rivers',   role: 'Head Waiter',    status: 'on-shift',  image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0101', email: 'j.rivers@kd.com'    },
-  { id: 'EMP-8812', name: 'Elena Rodriguez', role: 'Executive Chef', status: 'on-shift',  image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0102', email: 'e.rodriguez@kd.com' },
-  { id: 'EMP-9041', name: 'Sarah Chen',      role: 'Head Cashier',  status: 'off-duty',  image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0103', email: 's.chen@kd.com'      },
-  { id: 'EMP-9520', name: 'Derrick Smith',   role: 'Waiter',        status: 'on-break',  image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0104', email: 'd.smith@kd.com'     },
+  { id: 'EMP-9234', name: 'Julian Rivers',   role: 'Head Waiter',    status: 'on-shift',  image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0101', email: 'j.rivers@restaurant-pos.com'    },
+  { id: 'EMP-8812', name: 'Elena Rodriguez', role: 'Executive Chef', status: 'on-shift',  image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0102', email: 'e.rodriguez@restaurant-pos.com' },
+  { id: 'EMP-9041', name: 'Sarah Chen',      role: 'Head Cashier',  status: 'off-duty',  image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0103', email: 's.chen@restaurant-pos.com'      },
+  { id: 'EMP-9520', name: 'Derrick Smith',   role: 'Waiter',        status: 'on-break',  image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80', phone: '+1 555-0104', email: 'd.smith@restaurant-pos.com'     },
 ];
 
 export const STAFF_ACTIVITY_LOG = [

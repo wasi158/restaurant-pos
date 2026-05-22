@@ -1,6 +1,6 @@
-# Kinetic Darkroom - Application Documentation
+# Restaurant POS - Application Documentation
 
-Welcome to the **Kinetic Darkroom** restaurant management application. This software is built as a complete point-of-sale (POS) and administrative dashboard for a premium gastrolounge, running as a modern desktop application via Electron and React.
+Welcome to the **Restaurant POS** restaurant management application. This software is built as a complete point-of-sale (POS) and administrative dashboard for restaurants, running as a modern desktop application via Electron and React.
 
 ---
 

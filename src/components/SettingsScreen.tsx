@@ -18,10 +18,10 @@ const SECTIONS = [
 type User = { id: string; name: string; role: string; email: string; active: boolean };
 
 const INITIAL_USERS: User[] = [
-  { id: 'U1', name: 'Marcus V.',    role: 'General Manager', email: 'marcus@kd.com',  active: true  },
-  { id: 'U2', name: 'Julian R.',    role: 'Head Waiter',     email: 'julian@kd.com',  active: true  },
-  { id: 'U3', name: 'Elena R.',     role: 'Executive Chef',  email: 'elena@kd.com',   active: true  },
-  { id: 'U4', name: 'Sarah C.',     role: 'Head Cashier',    email: 'sarah@kd.com',   active: false },
+  { id: 'U1', name: 'Marcus V.',    role: 'General Manager', email: 'marcus@restaurant-pos.com',  active: true  },
+  { id: 'U2', name: 'Julian R.',    role: 'Head Waiter',     email: 'julian@restaurant-pos.com',  active: true  },
+  { id: 'U3', name: 'Elena R.',     role: 'Executive Chef',  email: 'elena@restaurant-pos.com',   active: true  },
+  { id: 'U4', name: 'Sarah C.',     role: 'Head Cashier',    email: 'sarah@restaurant-pos.com',   active: false },
 ];
 
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
@@ -59,8 +59,8 @@ export function SettingsScreen() {
   const [saved, setSaved]       = useState(false);
 
   // Restaurant profile
-  const [restName, setRestName]     = useState('The Kinetic Darkroom');
-  const [restEmail, setRestEmail]   = useState('hello@kineticdarkroom.com');
+  const [restName, setRestName]     = useState('Restaurant POS');
+  const [restEmail, setRestEmail]   = useState('hello@restaurant-pos.com');
   const [restPhone, setRestPhone]   = useState('+1 555-9000');
   const [restAddr, setRestAddr]     = useState('42 Ember Lane, New York, NY 10001');
   const [timezone, setTimezone]     = useState('America/New_York');

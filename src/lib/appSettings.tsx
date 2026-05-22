@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-const STORAGE_KEY = 'kd.app.v1';
+const STORAGE_KEY = 'restaurant-pos.app.v1';
 
 /** ISO 4217 codes supported for display (PKR included). */
 export const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'PKR'] as const;

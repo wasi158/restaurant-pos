@@ -32,7 +32,7 @@ function exportCSV(period: Period, formatAmount: (n: number) => string, currency
   const sections: string[] = [];
 
   // Header
-  sections.push(`Kinetic Darkroom — Analytics Export`);
+  sections.push(`Restaurant POS — Analytics Export`);
   sections.push(`Period: ${period}`);
   sections.push(`Display currency,${currency}`);
   sections.push(`Generated: ${new Date().toLocaleString()}`);
@@ -87,7 +87,7 @@ function exportCSV(period: Period, formatAmount: (n: number) => string, currency
   const url  = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href     = url;
-  link.download = `kinetic-darkroom-report-${period.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.download = `restaurant-pos-report-${period.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

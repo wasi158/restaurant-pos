@@ -1,32 +1,34 @@
 {
-  "name": "kinetic-darkroom",
-  "productName": "Kinetic Darkroom",
+  "name": "restaurant-pos",
+  "productName": "Restaurant POS",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "main": "electron/main.ts",
+  "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "build:electron": "esbuild electron/main.ts electron/preload.ts --bundle --platform=node --format=esm --outdir=dist-electron --external:electron",
+    "electron:dev": "npm run build:electron && concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "electron:build": "npm run build && electron-builder",
-    "electron:build:win": "npm run build && electron-builder --win",
-    "electron:build:mac": "npm run build && electron-builder --mac",
-    "electron:build:linux": "npm run build && electron-builder --linux"
+    "electron:build": "npm run build && npm run build:electron && electron-builder",
+    "electron:build:win": "npm run build && npm run build:electron && electron-builder --win",
+    "electron:build:mac": "npm run build && npm run build:electron && electron-builder --mac",
+    "electron:build:linux": "npm run build && npm run build:electron && electron-builder --linux"
   },
   "build": {
-    "appId": "com.kineticdarkroom.admin",
-    "productName": "Kinetic Darkroom",
+    "appId": "com.restaurantpos.app",
+    "productName": "Restaurant POS",
     "directories": {
       "output": "release"
     },
     "files": [
       "dist/**/*",
-      "electron/**/*",
-      "node_modules/**/*"
+      "dist-electron/**/*",
+      "node_modules/**/*",
+      "package.json"
     ],
     "win": {
       "target": [
@@ -37,7 +39,8 @@
           ]
         }
       ],
-      "icon": "public/icon.ico"
+      "icon": "public/icon.ico",
+      "signAndEditExecutable": false
     },
     "mac": {
       "target": [
@@ -90,7 +93,7 @@
     "concurrently": "^9.2.1",
     "electron": "^41.2.0",
     "electron-builder": "^26.8.1",
-    "electron-is-dev": "^3.0.1",
+    "esbuild": "^0.25.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

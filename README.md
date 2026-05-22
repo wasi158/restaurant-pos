@@ -2,9 +2,11 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# Restaurant POS
 
-This contains everything you need to run your app locally.
+Desktop restaurant point-of-sale and management app (Electron + React).
+
+This contains everything you need to run the app locally.
 
 View your app in AI Studio: https://ai.studio/apps/66563916-19e8-44b3-ac58-95599574ea53
 

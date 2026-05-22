@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
-import isDev from 'electron-is-dev';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,11 +36,13 @@ function createWindow() {
     },
   });
 
-  const startUrl = isDev 
-    ? 'http://localhost:3000' 
-    : `file://${path.join(__dirname, '../dist/index.html')}`;
+  const isDev = !app.isPackaged;
 
-  win.loadURL(startUrl);
+  if (isDev) {
+    win.loadURL('http://localhost:3000');
+  } else {
+    win.loadFile(path.join(__dirname, '../dist/index.html'));
+  }
 
   if (isDev) {
     win.webContents.openDevTools();
