@@ -84,7 +84,7 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
           <ArrowLeft className="w-4 h-4" /> Back to POS
         </button>
         <div className="flex items-center gap-2 text-secondary font-bold">
-          <CheckCircle2 className="w-5 h-5" />
+          <CheckCircle2 className="w-6 h-6" />
           Order Paid Successfully
         </div>
         <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-surface-container-high border border-outline-variant rounded-xl text-sm font-bold hover:bg-surface-bright transition-all">
