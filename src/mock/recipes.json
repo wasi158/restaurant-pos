@@ -1,0 +1,160 @@
+{
+  "categories": ["Mains", "Starters", "Desserts", "Drinks", "Sides", "Sauces"],
+  "items": [
+    {
+      "id": "REC-WAGYU-BURGER",
+      "name": "Wagyu Burger",
+      "category": "Mains",
+      "prepTime": 10,
+      "cookTime": 8,
+      "ingredients": [
+        { "inventoryId": "INV-001", "name": "Wagyu Beef",  "qty": 200, "unit": "g", "unitCost": 0.085 },
+        { "inventoryId": "INV-034", "name": "Brioche Bun", "qty": 1,   "unit": "pcs", "unitCost": 0.45 },
+        { "inventoryId": "INV-035", "name": "Lettuce",     "qty": 30,  "unit": "g", "unitCost": 0.003 },
+        { "inventoryId": "INV-016", "name": "Truffle Oil",  "qty": 10,  "unit": "ml", "unitCost": 0.12 },
+        { "inventoryId": "INV-033", "name": "Salt",         "qty": 2,   "unit": "g", "unitCost": 0.0002 }
+      ],
+      "instructions": "Season wagyu patty. Grill on medium-high 4 min per side. Toast brioche bun. Drizzle truffle oil. Assemble with lettuce."
+    },
+    {
+      "id": "REC-SALMON-BOWL",
+      "name": "Smoked Salmon Bowl",
+      "category": "Mains",
+      "prepTime": 8,
+      "cookTime": 15,
+      "ingredients": [
+        { "inventoryId": "INV-002", "name": "Atlantic Salmon", "qty": 150, "unit": "g", "unitCost": 0.042 },
+        { "inventoryId": "INV-005", "name": "Avocado",         "qty": 80,  "unit": "g", "unitCost": 0.004 },
+        { "inventoryId": "INV-017", "name": "Quinoa",          "qty": 100, "unit": "g", "unitCost": 0.006 }
+      ],
+      "instructions": "Cook quinoa. Slice salmon and avocado. Assemble bowl. Drizzle olive oil and season."
+    },
+    {
+      "id": "REC-TRUFFLE-PASTA",
+      "name": "Truffle Pasta",
+      "category": "Mains",
+      "prepTime": 5,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-008", "name": "Pasta (Tagliatelle)", "qty": 150, "unit": "g", "unitCost": 0.0035 },
+        { "inventoryId": "INV-004", "name": "Black Truffle",       "qty": 5,   "unit": "g", "unitCost": 3.20 },
+        { "inventoryId": "INV-029", "name": "Butter",              "qty": 30,  "unit": "g", "unitCost": 0.008 },
+        { "inventoryId": "INV-007", "name": "Parmesan",            "qty": 20,  "unit": "g", "unitCost": 0.018 },
+        { "inventoryId": "INV-012", "name": "Heavy Cream",         "qty": 50,  "unit": "ml", "unitCost": 0.0038 }
+      ],
+      "instructions": "Boil pasta al dente. Melt butter, add cream and truffle shavings. Toss pasta. Top with parmesan."
+    },
+    {
+      "id": "REC-MISO-COD",
+      "name": "Miso Cod",
+      "category": "Mains",
+      "prepTime": 10,
+      "cookTime": 15,
+      "ingredients": [
+        { "inventoryId": "INV-014", "name": "Cod Fillet", "qty": 180, "unit": "g", "unitCost": 0.032 },
+        { "inventoryId": "INV-013", "name": "Miso Paste", "qty": 25,  "unit": "g", "unitCost": 0.012 },
+        { "inventoryId": "INV-027", "name": "Sesame Oil", "qty": 5,   "unit": "ml", "unitCost": 0.015 }
+      ],
+      "instructions": "Marinate cod in miso paste overnight. Bake at 400°F for 15 min. Drizzle sesame oil."
+    },
+    {
+      "id": "REC-RIBEYE",
+      "name": "Ribeye Steak",
+      "category": "Mains",
+      "prepTime": 5,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-003", "name": "Ribeye Steak", "qty": 300, "unit": "g", "unitCost": 0.072 },
+        { "inventoryId": "INV-029", "name": "Butter",       "qty": 20,  "unit": "g", "unitCost": 0.008 },
+        { "inventoryId": "INV-033", "name": "Salt",          "qty": 3,   "unit": "g", "unitCost": 0.0002 }
+      ],
+      "instructions": "Season ribeye. Sear in hot pan with butter. Rest 5 min. Serve with sides."
+    },
+    {
+      "id": "REC-BURRATA-SALAD",
+      "name": "Burrata Salad",
+      "category": "Starters",
+      "prepTime": 5,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-006", "name": "Burrata", "qty": 120, "unit": "g", "unitCost": 0.018 },
+        { "inventoryId": "INV-018", "name": "Tomato",  "qty": 100, "unit": "g", "unitCost": 0.003 },
+        { "inventoryId": "INV-019", "name": "Basil",   "qty": 10,  "unit": "g", "unitCost": 0.02 }
+      ],
+      "instructions": "Slice tomatoes. Place burrata in center. Scatter basil. Drizzle olive oil and season."
+    },
+    {
+      "id": "REC-TUNA-TARTARE",
+      "name": "Tuna Tartare",
+      "category": "Starters",
+      "prepTime": 10,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-015", "name": "Tuna (Sashimi Grade)", "qty": 150, "unit": "g", "unitCost": 0.055 },
+        { "inventoryId": "INV-005", "name": "Avocado",              "qty": 50,  "unit": "g", "unitCost": 0.004 },
+        { "inventoryId": "INV-036", "name": "Wasabi",               "qty": 3,   "unit": "g", "unitCost": 0.15 }
+      ],
+      "instructions": "Dice tuna finely. Mix with avocado and wasabi. Serve chilled."
+    },
+    {
+      "id": "REC-TRUFFLE-FRIES",
+      "name": "Truffle Fries",
+      "category": "Starters",
+      "prepTime": 5,
+      "cookTime": 8,
+      "ingredients": [
+        { "inventoryId": "INV-020", "name": "Potato",      "qty": 250, "unit": "g", "unitCost": 0.001 },
+        { "inventoryId": "INV-016", "name": "Truffle Oil",  "qty": 10,  "unit": "ml", "unitCost": 0.12 },
+        { "inventoryId": "INV-007", "name": "Parmesan",     "qty": 15,  "unit": "g", "unitCost": 0.018 }
+      ],
+      "instructions": "Cut potatoes into fries. Deep fry until golden. Toss in truffle oil and parmesan."
+    },
+    {
+      "id": "REC-ESPRESSO-MARTINI",
+      "name": "Espresso Martini",
+      "category": "Drinks",
+      "prepTime": 3,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-031", "name": "Vodka",          "qty": 50,  "unit": "ml", "unitCost": 0.03 },
+        { "inventoryId": "INV-011", "name": "Espresso Beans", "qty": 15,  "unit": "g", "unitCost": 0.028 }
+      ],
+      "instructions": "Brew espresso from beans. Add vodka to shaker with ice. Shake 15 sec. Strain into martini glass."
+    },
+    {
+      "id": "REC-LAVA-CAKE",
+      "name": "Lava Cake",
+      "category": "Desserts",
+      "prepTime": 10,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-028", "name": "Chocolate (Dark)", "qty": 100, "unit": "g", "unitCost": 0.02 },
+        { "inventoryId": "INV-029", "name": "Butter",           "qty": 50,  "unit": "g", "unitCost": 0.008 },
+        { "inventoryId": "INV-030", "name": "Eggs",             "qty": 2,   "unit": "pcs", "unitCost": 0.25 }
+      ],
+      "instructions": "Melt chocolate and butter. Whisk eggs and sugar. Fold in flour. Bake at 425°F for 12 min."
+    },
+    {
+      "id": "REC-CREME-BRULEE",
+      "name": "Crème Brûlée",
+      "category": "Desserts",
+      "prepTime": 15,
+      "cookTime": 45,
+      "ingredients": [
+        { "inventoryId": "INV-012", "name": "Heavy Cream",     "qty": 200, "unit": "ml", "unitCost": 0.0038 },
+        { "inventoryId": "INV-030", "name": "Eggs",            "qty": 3,   "unit": "pcs", "unitCost": 0.25 },
+        { "inventoryId": "INV-038", "name": "Sugar",           "qty": 60,  "unit": "g", "unitCost": 0.001 },
+        { "inventoryId": "INV-039", "name": "Vanilla Extract", "qty": 5,   "unit": "ml", "unitCost": 0.08 }
+      ],
+      "instructions": "Heat cream with vanilla. Whisk yolks and sugar. Temper, combine. Bake in water bath at 325°F for 45 min."
+    }
+  ],
+  "blankItem": {
+    "name": "",
+    "category": "Mains",
+    "prepTime": 10,
+    "cookTime": 10,
+    "ingredients": [],
+    "instructions": ""
+  }
+}

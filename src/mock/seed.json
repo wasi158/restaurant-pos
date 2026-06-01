@@ -1,0 +1,429 @@
+{
+  "version": 1,
+  "inventory": [
+    { "id": "INV-001", "name": "Wagyu Beef",          "category": "Proteins",  "dishCategory": "General",  "dishName": "Wagyu Burger",        "quantity": 4200,  "unit": "g",   "costPerUnit": 0.085,  "minLevel": 2000, "expiryDate": "2026-05-28" },
+    { "id": "INV-002", "name": "Atlantic Salmon",     "category": "Proteins",  "dishCategory": "General",  "dishName": "Smoked Salmon Bowl",  "quantity": 2100,  "unit": "g",   "costPerUnit": 0.042,  "minLevel": 1000, "expiryDate": "2026-05-26" },
+    { "id": "INV-003", "name": "Ribeye Steak",        "category": "Proteins",  "dishCategory": "General",  "dishName": "Ribeye Steak",        "quantity": 8500,  "unit": "g",   "costPerUnit": 0.072,  "minLevel": 2000, "expiryDate": "2026-06-02" },
+    { "id": "INV-004", "name": "Black Truffle",       "category": "Produce",   "dishCategory": "General",  "dishName": "",                    "quantity": 120,   "unit": "g",   "costPerUnit": 3.20,   "minLevel": 50,   "expiryDate": "2026-05-27" },
+    { "id": "INV-005", "name": "Avocado",             "category": "Produce",   "dishCategory": "General",  "dishName": "Smoked Salmon Bowl",  "quantity": 3000,  "unit": "g",   "costPerUnit": 0.004,  "minLevel": 500,  "expiryDate": "2026-05-29" },
+    { "id": "INV-006", "name": "Burrata",             "category": "Dairy",     "dishCategory": "General",  "dishName": "Burrata Salad",       "quantity": 1500,  "unit": "g",   "costPerUnit": 0.018,  "minLevel": 300,  "expiryDate": "2026-05-25" },
+    { "id": "INV-007", "name": "Parmesan",            "category": "Dairy",     "dishCategory": "General",  "dishName": "",                    "quantity": 3800,  "unit": "g",   "costPerUnit": 0.018,  "minLevel": 500,  "expiryDate": "2026-08-15" },
+    { "id": "INV-008", "name": "Pasta (Tagliatelle)", "category": "Dry Goods", "dishCategory": "General",  "dishName": "Truffle Pasta",       "quantity": 12000, "unit": "g",   "costPerUnit": 0.0035, "minLevel": 3000, "expiryDate": "2027-03-10" },
+    { "id": "INV-009", "name": "Cabernet Sauvignon",  "category": "Beverages", "dishCategory": "Drinks",   "dishName": "Cabernet Sauvignon",  "quantity": 18,    "unit": "pcs", "costPerUnit": 22.00,  "minLevel": 6,    "expiryDate": "2028-12-01" },
+    { "id": "INV-010", "name": "Craft Lager Keg",     "category": "Beverages", "dishCategory": "Drinks",   "dishName": "Craft Lager",         "quantity": 15000, "unit": "ml",  "costPerUnit": 0.006,  "minLevel": 5000, "expiryDate": "2026-06-15" },
+    { "id": "INV-011", "name": "Espresso Beans",      "category": "Dry Goods", "dishCategory": "Drinks",   "dishName": "Espresso Martini",    "quantity": 5500,  "unit": "g",   "costPerUnit": 0.028,  "minLevel": 1000, "expiryDate": "2026-09-20" },
+    { "id": "INV-012", "name": "Heavy Cream",         "category": "Dairy",     "dishCategory": "Desserts", "dishName": "Crème Brûlée",        "quantity": 6000,  "unit": "ml",  "costPerUnit": 0.0038, "minLevel": 2000, "expiryDate": "2026-05-27" },
+    { "id": "INV-013", "name": "Miso Paste",          "category": "Dry Goods", "dishCategory": "General",  "dishName": "Miso Cod",            "quantity": 2000,  "unit": "g",   "costPerUnit": 0.012,  "minLevel": 500,  "expiryDate": "2027-01-15" },
+    { "id": "INV-014", "name": "Cod Fillet",          "category": "Proteins",  "dishCategory": "General",  "dishName": "Miso Cod",            "quantity": 5000,  "unit": "g",   "costPerUnit": 0.032,  "minLevel": 1500, "expiryDate": "2026-05-30" },
+    { "id": "INV-015", "name": "Tuna (Sashimi Grade)","category": "Proteins",  "dishCategory": "General",  "dishName": "Tuna Tartare",        "quantity": 3000,  "unit": "g",   "costPerUnit": 0.055,  "minLevel": 800,  "expiryDate": "2026-05-24" },
+    { "id": "INV-016", "name": "Truffle Oil",         "category": "Dry Goods", "dishCategory": "General",  "dishName": "",                    "quantity": 1500,  "unit": "ml",  "costPerUnit": 0.12,   "minLevel": 300,  "expiryDate": "2027-06-01" },
+    { "id": "INV-017", "name": "Quinoa",              "category": "Dry Goods", "dishCategory": "General",  "dishName": "Smoked Salmon Bowl",  "quantity": 5000,  "unit": "g",   "costPerUnit": 0.006,  "minLevel": 1000, "expiryDate": "2027-08-20" },
+    { "id": "INV-018", "name": "Tomato",              "category": "Produce",   "dishCategory": "General",  "dishName": "Burrata Salad",       "quantity": 4000,  "unit": "g",   "costPerUnit": 0.003,  "minLevel": 1000, "expiryDate": "2026-05-28" },
+    { "id": "INV-019", "name": "Basil",               "category": "Produce",   "dishCategory": "General",  "dishName": "Burrata Salad",       "quantity": 500,   "unit": "g",   "costPerUnit": 0.02,   "minLevel": 100,  "expiryDate": "2026-05-26" },
+    { "id": "INV-020", "name": "Potato",              "category": "Produce",   "dishCategory": "General",  "dishName": "Truffle Fries",       "quantity": 10000, "unit": "g",   "costPerUnit": 0.001,  "minLevel": 3000, "expiryDate": "2026-06-10" },
+    { "id": "INV-021", "name": "Mushrooms (Wild)",    "category": "Produce",   "dishCategory": "Pizza",    "dishName": "Truffle Wild Mushroom","quantity": 3000,  "unit": "g",   "costPerUnit": 0.015,  "minLevel": 500,  "expiryDate": "2026-05-27" },
+    { "id": "INV-022", "name": "Pizza Dough",         "category": "Dry Goods", "dishCategory": "Pizza",    "dishName": "Truffle Wild Mushroom","quantity": 5000,  "unit": "g",   "costPerUnit": 0.003,  "minLevel": 1500, "expiryDate": "2026-05-28" },
+    { "id": "INV-023", "name": "Mozzarella",          "category": "Dairy",     "dishCategory": "Pizza",    "dishName": "Truffle Wild Mushroom","quantity": 4000,  "unit": "g",   "costPerUnit": 0.01,   "minLevel": 1000, "expiryDate": "2026-06-05" },
+    { "id": "INV-024", "name": "Flour",               "category": "Dry Goods", "dishCategory": "General",  "dishName": "",                    "quantity": 8000,  "unit": "g",   "costPerUnit": 0.001,  "minLevel": 2000, "expiryDate": "2027-04-15" },
+    { "id": "INV-025", "name": "Ricotta",             "category": "Dairy",     "dishCategory": "General",  "dishName": "Blueberry Ricotta Stack","quantity": 3000,"unit": "g",   "costPerUnit": 0.008,  "minLevel": 500,  "expiryDate": "2026-05-29" },
+    { "id": "INV-026", "name": "Blueberry",           "category": "Produce",   "dishCategory": "General",  "dishName": "Blueberry Ricotta Stack","quantity": 2000,"unit": "g",   "costPerUnit": 0.012,  "minLevel": 500,  "expiryDate": "2026-05-28" },
+    { "id": "INV-027", "name": "Sesame Oil",          "category": "Dry Goods", "dishCategory": "General",  "dishName": "Miso Glazed Wagyu",   "quantity": 1000,  "unit": "ml",  "costPerUnit": 0.015,  "minLevel": 200,  "expiryDate": "2027-02-10" },
+    { "id": "INV-028", "name": "Chocolate (Dark)",    "category": "Dry Goods", "dishCategory": "Desserts", "dishName": "Lava Cake",           "quantity": 3000,  "unit": "g",   "costPerUnit": 0.02,   "minLevel": 500,  "expiryDate": "2026-11-30" },
+    { "id": "INV-029", "name": "Butter",              "category": "Dairy",     "dishCategory": "General",  "dishName": "",                    "quantity": 5000,  "unit": "g",   "costPerUnit": 0.008,  "minLevel": 1000, "expiryDate": "2026-06-20" },
+    { "id": "INV-030", "name": "Eggs",                "category": "Dairy",     "dishCategory": "General",  "dishName": "",                    "quantity": 120,   "unit": "pcs", "costPerUnit": 0.25,   "minLevel": 24,   "expiryDate": "2026-06-01" },
+    { "id": "INV-031", "name": "Vodka",               "category": "Beverages", "dishCategory": "Drinks",   "dishName": "Espresso Martini",    "quantity": 3000,  "unit": "ml",  "costPerUnit": 0.03,   "minLevel": 750 },
+    { "id": "INV-032", "name": "Olive Oil",           "category": "Dry Goods", "dishCategory": "General",  "dishName": "",                    "quantity": 5000,  "unit": "ml",  "costPerUnit": 0.008,  "minLevel": 1000, "expiryDate": "2027-05-01" },
+    { "id": "INV-033", "name": "Salt",                "category": "Dry Goods", "dishCategory": "General",  "dishName": "",                    "quantity": 3000,  "unit": "g",   "costPerUnit": 0.0002, "minLevel": 500 },
+    { "id": "INV-034", "name": "Brioche Bun",         "category": "Dry Goods", "dishCategory": "General",  "dishName": "Wagyu Burger",        "quantity": 80,    "unit": "pcs", "costPerUnit": 0.45,   "minLevel": 20,   "expiryDate": "2026-05-27" },
+    { "id": "INV-035", "name": "Lettuce",             "category": "Produce",   "dishCategory": "General",  "dishName": "Wagyu Burger",        "quantity": 3000,  "unit": "g",   "costPerUnit": 0.003,  "minLevel": 500,  "expiryDate": "2026-05-27" },
+    { "id": "INV-036", "name": "Wasabi",              "category": "Dry Goods", "dishCategory": "General",  "dishName": "Tuna Tartare",        "quantity": 200,   "unit": "g",   "costPerUnit": 0.15,   "minLevel": 50,   "expiryDate": "2026-12-15" },
+    { "id": "INV-037", "name": "Sourdough Bread",     "category": "Dry Goods", "dishCategory": "General",  "dishName": "Burrata Toast",       "quantity": 40,    "unit": "pcs", "costPerUnit": 0.80,   "minLevel": 10,   "expiryDate": "2026-05-26" },
+    { "id": "INV-038", "name": "Sugar",               "category": "Dry Goods", "dishCategory": "Desserts", "dishName": "Crème Brûlée",        "quantity": 5000,  "unit": "g",   "costPerUnit": 0.001,  "minLevel": 1000 },
+    { "id": "INV-039", "name": "Vanilla Extract",     "category": "Dry Goods", "dishCategory": "Desserts", "dishName": "Crème Brûlée",        "quantity": 500,   "unit": "ml",  "costPerUnit": 0.08,   "minLevel": 100,  "expiryDate": "2027-09-01" }
+  ],
+  "recipes": [
+    {
+      "id": "REC-WAGYU-BURGER",
+      "name": "Wagyu Burger",
+      "category": "Mains",
+      "prepTime": 10,
+      "cookTime": 8,
+      "ingredients": [
+        { "inventoryId": "INV-001", "qty": 200, "unit": "g" },
+        { "inventoryId": "INV-034", "qty": 1,   "unit": "pcs" },
+        { "inventoryId": "INV-035", "qty": 30,  "unit": "g" },
+        { "inventoryId": "INV-016", "qty": 10,  "unit": "ml" },
+        { "inventoryId": "INV-033", "qty": 2,   "unit": "g" }
+      ],
+      "instructions": "Season wagyu patty. Grill on medium-high 4 min per side. Toast brioche bun. Drizzle truffle oil. Assemble with lettuce."
+    },
+    {
+      "id": "REC-SALMON-BOWL",
+      "name": "Smoked Salmon Bowl",
+      "category": "Mains",
+      "prepTime": 8,
+      "cookTime": 15,
+      "ingredients": [
+        { "inventoryId": "INV-002", "qty": 150, "unit": "g" },
+        { "inventoryId": "INV-005", "qty": 80,  "unit": "g" },
+        { "inventoryId": "INV-017", "qty": 100, "unit": "g" },
+        { "inventoryId": "INV-032", "qty": 10,  "unit": "ml" },
+        { "inventoryId": "INV-033", "qty": 2,   "unit": "g" }
+      ],
+      "instructions": "Cook quinoa. Slice salmon and avocado. Assemble bowl. Drizzle olive oil and season."
+    },
+    {
+      "id": "REC-TRUFFLE-MUSHROOM",
+      "name": "Truffle Wild Mushroom",
+      "category": "Pizza",
+      "prepTime": 15,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-022", "qty": 250, "unit": "g" },
+        { "inventoryId": "INV-021", "qty": 120, "unit": "g" },
+        { "inventoryId": "INV-016", "qty": 15,  "unit": "ml" },
+        { "inventoryId": "INV-023", "qty": 100, "unit": "g" },
+        { "inventoryId": "INV-032", "qty": 10,  "unit": "ml" }
+      ],
+      "instructions": "Stretch pizza dough. Top with mozzarella and wild mushrooms. Bake at 450°F for 12 min. Drizzle truffle oil."
+    },
+    {
+      "id": "REC-RICOTTA-STACK",
+      "name": "Blueberry Ricotta Stack",
+      "category": "Mains",
+      "prepTime": 10,
+      "cookTime": 15,
+      "ingredients": [
+        { "inventoryId": "INV-024", "qty": 150, "unit": "g" },
+        { "inventoryId": "INV-025", "qty": 100, "unit": "g" },
+        { "inventoryId": "INV-026", "qty": 80,  "unit": "g" },
+        { "inventoryId": "INV-030", "qty": 2,   "unit": "pcs" },
+        { "inventoryId": "INV-029", "qty": 20,  "unit": "g" }
+      ],
+      "instructions": "Mix flour, ricotta, eggs. Cook pancakes in butter. Stack with blueberry compote."
+    },
+    {
+      "id": "REC-MISO-WAGYU",
+      "name": "Miso Glazed Wagyu",
+      "category": "Mains",
+      "prepTime": 15,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-001", "qty": 250, "unit": "g" },
+        { "inventoryId": "INV-013", "qty": 30,  "unit": "g" },
+        { "inventoryId": "INV-027", "qty": 10,  "unit": "ml" },
+        { "inventoryId": "INV-033", "qty": 2,   "unit": "g" }
+      ],
+      "instructions": "Marinate wagyu in miso paste. Sear in sesame oil. Rest 5 min before slicing."
+    },
+    {
+      "id": "REC-BURRATA-SALAD",
+      "name": "Burrata Salad",
+      "category": "Starters",
+      "prepTime": 5,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-006", "qty": 120, "unit": "g" },
+        { "inventoryId": "INV-018", "qty": 100, "unit": "g" },
+        { "inventoryId": "INV-019", "qty": 10,  "unit": "g" },
+        { "inventoryId": "INV-032", "qty": 15,  "unit": "ml" },
+        { "inventoryId": "INV-033", "qty": 1,   "unit": "g" }
+      ],
+      "instructions": "Slice tomatoes. Place burrata in center. Scatter basil. Drizzle olive oil and season."
+    },
+    {
+      "id": "REC-TUNA-TARTARE",
+      "name": "Tuna Tartare",
+      "category": "Starters",
+      "prepTime": 10,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-015", "qty": 150, "unit": "g" },
+        { "inventoryId": "INV-005", "qty": 50,  "unit": "g" },
+        { "inventoryId": "INV-027", "qty": 5,   "unit": "ml" },
+        { "inventoryId": "INV-036", "qty": 3,   "unit": "g" }
+      ],
+      "instructions": "Dice tuna finely. Mix with avocado, sesame oil, and wasabi. Serve chilled."
+    },
+    {
+      "id": "REC-TRUFFLE-FRIES",
+      "name": "Truffle Fries",
+      "category": "Starters",
+      "prepTime": 5,
+      "cookTime": 8,
+      "ingredients": [
+        { "inventoryId": "INV-020", "qty": 250, "unit": "g" },
+        { "inventoryId": "INV-016", "qty": 10,  "unit": "ml" },
+        { "inventoryId": "INV-007", "qty": 15,  "unit": "g" },
+        { "inventoryId": "INV-033", "qty": 3,   "unit": "g" }
+      ],
+      "instructions": "Cut potatoes into fries. Deep fry until golden. Toss in truffle oil and parmesan."
+    },
+    {
+      "id": "REC-BURRATA-TOAST",
+      "name": "Burrata Toast",
+      "category": "Starters",
+      "prepTime": 5,
+      "cookTime": 3,
+      "ingredients": [
+        { "inventoryId": "INV-037", "qty": 2,   "unit": "pcs" },
+        { "inventoryId": "INV-006", "qty": 80,  "unit": "g" },
+        { "inventoryId": "INV-018", "qty": 60,  "unit": "g" },
+        { "inventoryId": "INV-032", "qty": 10,  "unit": "ml" }
+      ],
+      "instructions": "Toast sourdough. Top with burrata and sliced tomato. Drizzle olive oil."
+    },
+    {
+      "id": "REC-TRUFFLE-PASTA",
+      "name": "Truffle Pasta",
+      "category": "Mains",
+      "prepTime": 5,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-008", "qty": 150, "unit": "g" },
+        { "inventoryId": "INV-004", "qty": 5,   "unit": "g" },
+        { "inventoryId": "INV-029", "qty": 30,  "unit": "g" },
+        { "inventoryId": "INV-007", "qty": 20,  "unit": "g" },
+        { "inventoryId": "INV-012", "qty": 50,  "unit": "ml" }
+      ],
+      "instructions": "Boil pasta al dente. Melt butter, add cream and truffle shavings. Toss pasta. Top with parmesan."
+    },
+    {
+      "id": "REC-MISO-COD",
+      "name": "Miso Cod",
+      "category": "Mains",
+      "prepTime": 10,
+      "cookTime": 15,
+      "ingredients": [
+        { "inventoryId": "INV-014", "qty": 180, "unit": "g" },
+        { "inventoryId": "INV-013", "qty": 25,  "unit": "g" },
+        { "inventoryId": "INV-027", "qty": 5,   "unit": "ml" }
+      ],
+      "instructions": "Marinate cod in miso paste overnight. Bake at 400°F for 15 min. Drizzle sesame oil."
+    },
+    {
+      "id": "REC-RIBEYE",
+      "name": "Ribeye Steak",
+      "category": "Mains",
+      "prepTime": 5,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-003", "qty": 300, "unit": "g" },
+        { "inventoryId": "INV-029", "qty": 20,  "unit": "g" },
+        { "inventoryId": "INV-033", "qty": 3,   "unit": "g" },
+        { "inventoryId": "INV-032", "qty": 10,  "unit": "ml" }
+      ],
+      "instructions": "Season ribeye. Sear in hot pan with butter. Rest 5 min. Serve with sides."
+    },
+    {
+      "id": "REC-CABERNET",
+      "name": "Cabernet Sauvignon",
+      "category": "Drinks",
+      "prepTime": 1,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-009", "qty": 1, "unit": "pcs" }
+      ],
+      "instructions": "Open bottle. Pour 150ml into wine glass. Serve at room temperature."
+    },
+    {
+      "id": "REC-CRAFT-LAGER",
+      "name": "Craft Lager",
+      "category": "Drinks",
+      "prepTime": 1,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-010", "qty": 500, "unit": "ml" }
+      ],
+      "instructions": "Pour from keg into chilled glass. Serve immediately."
+    },
+    {
+      "id": "REC-ESPRESSO-MARTINI",
+      "name": "Espresso Martini",
+      "category": "Drinks",
+      "prepTime": 3,
+      "cookTime": 0,
+      "ingredients": [
+        { "inventoryId": "INV-031", "qty": 50,  "unit": "ml" },
+        { "inventoryId": "INV-011", "qty": 15,  "unit": "g" },
+        { "inventoryId": "INV-038", "qty": 10,  "unit": "g" }
+      ],
+      "instructions": "Brew espresso from beans. Add vodka, espresso, sugar syrup to shaker with ice. Shake 15 sec. Strain into martini glass."
+    },
+    {
+      "id": "REC-LAVA-CAKE",
+      "name": "Lava Cake",
+      "category": "Desserts",
+      "prepTime": 10,
+      "cookTime": 12,
+      "ingredients": [
+        { "inventoryId": "INV-028", "qty": 100, "unit": "g" },
+        { "inventoryId": "INV-029", "qty": 50,  "unit": "g" },
+        { "inventoryId": "INV-030", "qty": 2,   "unit": "pcs" },
+        { "inventoryId": "INV-024", "qty": 30,  "unit": "g" },
+        { "inventoryId": "INV-038", "qty": 40,  "unit": "g" }
+      ],
+      "instructions": "Melt chocolate and butter. Whisk eggs and sugar. Fold in flour. Bake at 425°F for 12 min. Center should be molten."
+    },
+    {
+      "id": "REC-CREME-BRULEE",
+      "name": "Crème Brûlée",
+      "category": "Desserts",
+      "prepTime": 15,
+      "cookTime": 45,
+      "ingredients": [
+        { "inventoryId": "INV-012", "qty": 200, "unit": "ml" },
+        { "inventoryId": "INV-030", "qty": 3,   "unit": "pcs" },
+        { "inventoryId": "INV-038", "qty": 60,  "unit": "g" },
+        { "inventoryId": "INV-039", "qty": 5,   "unit": "ml" }
+      ],
+      "instructions": "Heat cream with vanilla. Whisk yolks and sugar. Temper, combine. Bake in water bath at 325°F for 45 min. Torch sugar top."
+    }
+  ],
+  "menu": [
+    { "id": "MENU-001", "name": "Smoked Salmon Bowl",     "category": "Main Course", "price": 24.50, "recipeId": "REC-SALMON-BOWL",     "posIcon": "Fish",     "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=80&h=80" },
+    { "id": "MENU-002", "name": "Truffle Wild Mushroom",  "category": "Pizza",       "price": 19.00, "recipeId": "REC-TRUFFLE-MUSHROOM","posIcon": "Pizza",    "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=80&h=80" },
+    { "id": "MENU-003", "name": "Blueberry Ricotta Stack","category": "Brunch",      "price": 16.50, "recipeId": "REC-RICOTTA-STACK",   "posIcon": "Egg",      "image": "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&q=80&w=80&h=80" },
+    { "id": "MENU-004", "name": "Miso Glazed Wagyu",      "category": "Steaks",      "price": 52.00, "recipeId": "REC-MISO-WAGYU",      "posIcon": "Beef",     "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=80&h=80" },
+    { "id": "MENU-005", "name": "Burrata Salad",          "category": "Starters",    "price": 16.00, "recipeId": "REC-BURRATA-SALAD",   "posIcon": "Salad",    "image": "https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&q=80&w=80&h=80" },
+    { "id": "MENU-006", "name": "Lava Cake",              "category": "Desserts",    "price": 12.00, "recipeId": "REC-LAVA-CAKE",       "posIcon": "Cake",     "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=80&h=80" },
+    { "id": "MENU-007", "name": "Wagyu Burger",           "category": "Mains",       "price": 28.00, "recipeId": "REC-WAGYU-BURGER",    "posIcon": "Sandwich" },
+    { "id": "MENU-008", "name": "Truffle Pasta",          "category": "Mains",       "price": 24.50, "recipeId": "REC-TRUFFLE-PASTA",   "posIcon": "Soup" },
+    { "id": "MENU-009", "name": "Miso Cod",               "category": "Mains",       "price": 32.00, "recipeId": "REC-MISO-COD",        "posIcon": "Fish" },
+    { "id": "MENU-010", "name": "Ribeye Steak",           "category": "Steaks",      "price": 52.00, "recipeId": "REC-RIBEYE",          "posIcon": "Beef" },
+    { "id": "MENU-011", "name": "Tuna Tartare",           "category": "Starters",    "price": 18.50, "recipeId": "REC-TUNA-TARTARE",    "posIcon": "Fish" },
+    { "id": "MENU-012", "name": "Truffle Fries",          "category": "Starters",    "price": 9.00,  "recipeId": "REC-TRUFFLE-FRIES",   "posIcon": "Pizza" },
+    { "id": "MENU-013", "name": "Burrata Toast",          "category": "Starters",    "price": 12.00, "recipeId": "REC-BURRATA-TOAST",   "posIcon": "Egg" },
+    { "id": "MENU-014", "name": "Cabernet Sauvignon",     "category": "Drinks",      "price": 14.00, "recipeId": "REC-CABERNET",        "posIcon": "Wine" },
+    { "id": "MENU-015", "name": "Craft Lager",            "category": "Drinks",      "price": 8.00,  "recipeId": "REC-CRAFT-LAGER",     "posIcon": "Beer" },
+    { "id": "MENU-016", "name": "Espresso Martini",       "category": "Drinks",      "price": 13.00, "recipeId": "REC-ESPRESSO-MARTINI","posIcon": "CupSoda" },
+    { "id": "MENU-017", "name": "Crème Brûlée",           "category": "Desserts",    "price": 11.00, "recipeId": "REC-CREME-BRULEE",    "posIcon": "Cookie" }
+  ],
+  "orders": [],
+  "usage": [],
+  "vendors": [
+    {
+      "id": "VEN-001",
+      "name": "Prime Cuts Co.",
+      "contactName": "Alex Rivera",
+      "email": "orders@primecuts.example",
+      "phone": "+1 555-0101",
+      "address": "1200 Wholesale Row, District 4",
+      "accountNumber": "ACC-77821",
+      "paymentTerms": "Net 15",
+      "notes": "Wagyu, ribeye, and premium beef cuts. Deliveries Mon/Wed/Fri.",
+      "active": true
+    },
+    {
+      "id": "VEN-002",
+      "name": "Ocean Fresh",
+      "contactName": "Jamie Chen",
+      "email": "sales@oceanfresh.example",
+      "phone": "+1 555-0102",
+      "address": "88 Dockside Way",
+      "accountNumber": "ACC-99204",
+      "paymentTerms": "Net 30",
+      "notes": "Atlantic salmon, cod, sashimi-grade tuna. Min order 20 lb.",
+      "active": true
+    },
+    {
+      "id": "VEN-003",
+      "name": "Gourmet Imports",
+      "contactName": "Sophie Laurent",
+      "email": "sophie@gourmetimports.example",
+      "phone": "+1 555-0103",
+      "address": "450 Market Street, Suite 12",
+      "accountNumber": "ACC-44510",
+      "paymentTerms": "Net 30",
+      "notes": "Black truffle, truffle oil, specialty items.",
+      "active": true
+    },
+    {
+      "id": "VEN-004",
+      "name": "Fresh Farms",
+      "contactName": "Carlos Mendez",
+      "email": "carlos@freshfarms.example",
+      "phone": "+1 555-0104",
+      "address": "Rural Route 7, Valley Green",
+      "accountNumber": "ACC-11085",
+      "paymentTerms": "COD",
+      "notes": "Avocado, tomato, basil, blueberry, lettuce. Tue/Fri deliveries.",
+      "active": true
+    },
+    {
+      "id": "VEN-005",
+      "name": "Artisan Dairy",
+      "contactName": "Sam Brooks",
+      "email": "s.brooks@artisandairy.example",
+      "phone": "+1 555-0199",
+      "address": "PO Box 400, Creamery Lane",
+      "accountNumber": "ACC-20090",
+      "paymentTerms": "Net 15",
+      "notes": "Burrata, parmesan, ricotta, mozzarella, heavy cream, butter.",
+      "active": true
+    },
+    {
+      "id": "VEN-006",
+      "name": "Vine & Co.",
+      "contactName": "Rachel Okonkwo",
+      "email": "orders@vineandco.example",
+      "phone": "+1 555-0106",
+      "address": "22 Vineyard Road",
+      "accountNumber": "ACC-33201",
+      "paymentTerms": "Net 30",
+      "notes": "Cabernet Sauvignon and wine selection.",
+      "active": true
+    },
+    {
+      "id": "VEN-007",
+      "name": "Local Brew",
+      "contactName": "Marcus Webb",
+      "email": "marcus@localbrew.example",
+      "phone": "+1 555-0107",
+      "address": "15 Brewery District",
+      "accountNumber": "ACC-55102",
+      "paymentTerms": "Net 15",
+      "notes": "Craft lager kegs. Weekly delivery schedule.",
+      "active": true
+    }
+  ],
+  "promotions": [
+    {
+      "id": "PROMO-HAPPY-HOUR-10",
+      "name": "Happy hour — 10% off",
+      "description": "Ten percent off the entire check during happy hour (4-7 PM).",
+      "active": true,
+      "kind": "percent_off",
+      "percent": 10
+    },
+    {
+      "id": "PROMO-LUNCH-5-OFF",
+      "name": "Lunch rush — $5 off",
+      "description": "Flat $5.00 off the subtotal before tax during lunch window (11 AM - 2 PM).",
+      "active": true,
+      "kind": "fixed_off_order",
+      "fixedAmount": 5
+    },
+    {
+      "id": "PROMO-BOGO-WAGYU",
+      "name": "BOGO Wagyu Burger",
+      "description": "Buy one wagyu burger, get another free (charged qty = ceil(qty/2)).",
+      "active": true,
+      "kind": "bogo_menu_item",
+      "bogoMenuItemId": "MENU-007"
+    },
+    {
+      "id": "PROMO-COMBO-STEAK-DINNER",
+      "name": "Steak dinner combo",
+      "description": "Ribeye + Burrata Salad + Cabernet Sauvignon as a bundle. Extra items at list price.",
+      "active": true,
+      "kind": "package_deal",
+      "lines": [
+        { "menuItemId": "MENU-010", "qty": 1 },
+        { "menuItemId": "MENU-005", "qty": 1 },
+        { "menuItemId": "MENU-014", "qty": 1 }
+      ],
+      "bundlePrice": 69.99
+    }
+  ]
+}

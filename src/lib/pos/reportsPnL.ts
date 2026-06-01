@@ -1,4 +1,5 @@
-import type { Period } from '../../data/mockReports';
+import reportsJson from '../../mock/reports.json';
+type Period = (typeof reportsJson.periods)[number];
 import type { InventoryItem, InventoryUsage, PosStateV1 } from './types';
 import { byId } from './selectors';
 import { convertQty } from './units';

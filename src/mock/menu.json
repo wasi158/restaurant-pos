@@ -1,0 +1,166 @@
+{
+  "categories": ["Main Course", "Starters", "Pizza", "Brunch", "Steaks", "Desserts", "Drinks", "Mains"],
+  "items": [
+    {
+      "id": "MENU-001",
+      "name": "Smoked Salmon Bowl",
+      "category": "Main Course",
+      "price": 24.50,
+      "status": "In Stock",
+      "ingredients": "Salmon, Avocado, Quinoa",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=80&h=80"
+    },
+    {
+      "id": "MENU-002",
+      "name": "Truffle Wild Mushroom",
+      "category": "Pizza",
+      "price": 19.00,
+      "status": "In Stock",
+      "ingredients": "Mushrooms, Truffle Oil, Mozzarella",
+      "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=80&h=80"
+    },
+    {
+      "id": "MENU-003",
+      "name": "Blueberry Ricotta Stack",
+      "category": "Brunch",
+      "price": 16.50,
+      "status": "In Stock",
+      "ingredients": "Flour, Ricotta, Blueberry",
+      "image": "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&q=80&w=80&h=80"
+    },
+    {
+      "id": "MENU-004",
+      "name": "Miso Glazed Wagyu",
+      "category": "Steaks",
+      "price": 52.00,
+      "status": "In Stock",
+      "ingredients": "Wagyu Beef, Miso, Sesame",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=80&h=80"
+    },
+    {
+      "id": "MENU-005",
+      "name": "Burrata Salad",
+      "category": "Starters",
+      "price": 16.00,
+      "status": "In Stock",
+      "ingredients": "Burrata, Tomato, Basil",
+      "image": "https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&q=80&w=80&h=80"
+    },
+    {
+      "id": "MENU-006",
+      "name": "Lava Cake",
+      "category": "Desserts",
+      "price": 12.00,
+      "status": "In Stock",
+      "ingredients": "Chocolate, Butter, Eggs",
+      "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=80&h=80"
+    },
+    {
+      "id": "MENU-007",
+      "name": "Wagyu Burger",
+      "category": "Mains",
+      "price": 28.00,
+      "status": "In Stock",
+      "ingredients": "Wagyu Beef, Brioche Bun, Truffle Oil",
+      "image": ""
+    },
+    {
+      "id": "MENU-008",
+      "name": "Truffle Pasta",
+      "category": "Mains",
+      "price": 24.50,
+      "status": "In Stock",
+      "ingredients": "Tagliatelle, Black Truffle, Parmesan, Cream",
+      "image": ""
+    },
+    {
+      "id": "MENU-009",
+      "name": "Miso Cod",
+      "category": "Mains",
+      "price": 32.00,
+      "status": "In Stock",
+      "ingredients": "Cod Fillet, Miso Paste, Sesame Oil",
+      "image": ""
+    },
+    {
+      "id": "MENU-010",
+      "name": "Ribeye Steak",
+      "category": "Steaks",
+      "price": 52.00,
+      "status": "In Stock",
+      "ingredients": "Ribeye, Butter, Salt",
+      "image": ""
+    },
+    {
+      "id": "MENU-011",
+      "name": "Tuna Tartare",
+      "category": "Starters",
+      "price": 18.50,
+      "status": "In Stock",
+      "ingredients": "Sashimi Tuna, Avocado, Wasabi",
+      "image": ""
+    },
+    {
+      "id": "MENU-012",
+      "name": "Truffle Fries",
+      "category": "Starters",
+      "price": 9.00,
+      "status": "In Stock",
+      "ingredients": "Potato, Truffle Oil, Parmesan",
+      "image": ""
+    },
+    {
+      "id": "MENU-013",
+      "name": "Burrata Toast",
+      "category": "Starters",
+      "price": 12.00,
+      "status": "In Stock",
+      "ingredients": "Sourdough, Burrata, Tomato",
+      "image": ""
+    },
+    {
+      "id": "MENU-014",
+      "name": "Cabernet Sauvignon",
+      "category": "Drinks",
+      "price": 14.00,
+      "status": "In Stock",
+      "ingredients": "Wine",
+      "image": ""
+    },
+    {
+      "id": "MENU-015",
+      "name": "Craft Lager",
+      "category": "Drinks",
+      "price": 8.00,
+      "status": "In Stock",
+      "ingredients": "Draft Beer",
+      "image": ""
+    },
+    {
+      "id": "MENU-016",
+      "name": "Espresso Martini",
+      "category": "Drinks",
+      "price": 13.00,
+      "status": "In Stock",
+      "ingredients": "Vodka, Espresso, Sugar",
+      "image": ""
+    },
+    {
+      "id": "MENU-017",
+      "name": "Crème Brûlée",
+      "category": "Desserts",
+      "price": 11.00,
+      "status": "In Stock",
+      "ingredients": "Heavy Cream, Eggs, Sugar, Vanilla",
+      "image": ""
+    }
+  ],
+  "blankItem": {
+    "name": "",
+    "category": "Main Course",
+    "price": 0,
+    "status": "In Stock",
+    "ingredients": "",
+    "image": ""
+  }
+}

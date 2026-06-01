@@ -6,11 +6,12 @@ export type InventoryItem = {
   name: string;
   category: string;
   dishCategory: DishCategory;
-  dishName: string; // which product/dish this material is intended for (optional grouping)
+  dishName: string;
   quantity: number;
   unit: Unit;
   costPerUnit: number;
   minLevel: number;
+  expiryDate?: string;
 };
 
 export type RecipeIngredient = {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
+import React, { createContext, useContext, useMemo, useReducer } from 'react';
 import { flushSync } from 'react-dom';
 import type {
   InventoryItem,
@@ -16,12 +16,8 @@ import type {
 } from './types';
 import { POS_SEED_V1 } from './seed';
 import { convertQty } from './units';
-import { isDishCategory } from './constants';
 import { computeOrderPricing } from './promotionPricing';
 
-const STORAGE_KEY = 'restaurant-pos.pos.v1';
-
-/** Sentinel: if still present after dispatch, the reducer did not fill `resultRef` (should not happen). */
 const PLACE_RESULT_PENDING = '__RESTAURANT_POS_PLACE_PENDING__';
 
 function uid(prefix: string) {
@@ -52,156 +48,6 @@ function receiptTableLabel(input: PlaceOrderInput, channel: ServiceChannel): str
   return n ? `Delivery · ${n}` : 'Delivery';
 }
 
-function normalizePromotion(raw: any): Promotion | null {
-  const id = String(raw?.id ?? '').trim();
-  const name = String(raw?.name ?? '').trim();
-  if (!id || !name) return null;
-  const description = typeof raw.description === 'string' ? raw.description : '';
-  const active = raw.active !== false;
-  const kind = raw?.kind;
-  if (kind === 'percent_off') {
-    const percent = Number(raw.percent);
-    if (!Number.isFinite(percent)) return null;
-    return { id, name, description, active, kind: 'percent_off', percent: Math.min(100, Math.max(0, percent)) };
-  }
-  if (kind === 'fixed_off_order') {
-    const fixedAmount = Number(raw.fixedAmount);
-    if (!Number.isFinite(fixedAmount) || fixedAmount < 0) return null;
-    return { id, name, description, active, kind: 'fixed_off_order', fixedAmount };
-  }
-  if (kind === 'bogo_menu_item') {
-    const bogoMenuItemId = String(raw.bogoMenuItemId ?? '').trim();
-    if (!bogoMenuItemId) return null;
-    return { id, name, description, active, kind: 'bogo_menu_item', bogoMenuItemId };
-  }
-  if (kind === 'package_deal') {
-    const rawLines = Array.isArray(raw.lines) ? raw.lines : [];
-    const lines = rawLines
-      .map((ln: any) => {
-        const menuItemId = String(ln?.menuItemId ?? '').trim();
-        const q = Math.floor(Number(ln?.qty));
-        const qty = Number.isFinite(q) && q >= 1 ? q : 0;
-        return { menuItemId, qty };
-      })
-      .filter((ln: { menuItemId: string; qty: number }) => ln.menuItemId && ln.qty >= 1);
-    const bundlePrice = Number(raw.bundlePrice);
-    if (lines.length < 3 || lines.length > 4 || !Number.isFinite(bundlePrice) || bundlePrice < 0) return null;
-    const ids = new Set(lines.map((l: { menuItemId: string }) => l.menuItemId));
-    if (ids.size !== lines.length) return null;
-    return { id, name, description, active, kind: 'package_deal', lines, bundlePrice };
-  }
-  return null;
-}
-
-function normalizeOrderItem(raw: any): OrderItem | null {
-  const menuItemId = String(raw?.menuItemId ?? '').trim();
-  const nameSnapshot = String(raw?.nameSnapshot ?? '').trim();
-  if (!menuItemId || !nameSnapshot) return null;
-  const priceSnapshot = Number(raw?.priceSnapshot);
-  const qty = Math.floor(Number(raw?.qty));
-  if (!Number.isFinite(priceSnapshot) || qty <= 0) return null;
-  return { menuItemId, nameSnapshot, priceSnapshot, qty };
-}
-
-function normalizeOrder(raw: any): Order | null {
-  const id = String(raw?.id ?? '').trim();
-  if (!id) return null;
-  const items = (Array.isArray(raw.items) ? raw.items : [])
-    .map(normalizeOrderItem)
-    .filter((it): it is OrderItem => it !== null);
-  const subtotal = Number(raw.subtotal);
-  const tax = Number(raw.tax);
-  const total = Number(raw.total);
-  if (!Number.isFinite(subtotal) || !Number.isFinite(tax) || !Number.isFinite(total)) return null;
-
-  const legacy = raw.grossSubtotal == null || raw.discountTotal == null;
-  const grossSubtotal = legacy ? round2(subtotal) : round2(Number(raw.grossSubtotal));
-  const discountTotal = legacy ? 0 : round2(Number(raw.discountTotal));
-  const subtotalFinal = legacy ? round2(subtotal) : round2(Number(raw.subtotal));
-
-  const promotionId = raw.promotionId != null ? String(raw.promotionId) : null;
-  const promotionName = raw.promotionName != null ? String(raw.promotionName) : null;
-  const serviceChannel = parseServiceChannel(raw.serviceChannel);
-  const customerName = raw.customerName != null && String(raw.customerName).trim() ? String(raw.customerName).trim() : null;
-  const customerPhone = raw.customerPhone != null && String(raw.customerPhone).trim() ? String(raw.customerPhone).trim() : null;
-  const deliveryAddress =
-    raw.deliveryAddress != null && String(raw.deliveryAddress).trim() ? String(raw.deliveryAddress).trim() : null;
-  const deliveryNotes =
-    raw.deliveryNotes != null && String(raw.deliveryNotes).trim() ? String(raw.deliveryNotes).trim() : null;
-
-  return {
-    id,
-    createdAtIso: typeof raw.createdAtIso === 'string' ? raw.createdAtIso : new Date().toISOString(),
-    table: String(raw.table ?? ''),
-    paymentMethod: String(raw.paymentMethod ?? ''),
-    items,
-    grossSubtotal,
-    discountTotal,
-    subtotal: subtotalFinal,
-    tax: round2(tax),
-    total: round2(total),
-    promotionId,
-    promotionName,
-    serviceChannel,
-    customerName,
-    customerPhone,
-    deliveryAddress,
-    deliveryNotes,
-  };
-}
-
-function normalizeVendor(raw: any): Vendor | null {
-  const id = String(raw?.id ?? '').trim();
-  const name = String(raw?.name ?? '').trim();
-  if (!id || !name) return null;
-  return {
-    id,
-    name,
-    contactName: typeof raw.contactName === 'string' ? raw.contactName : '',
-    email: typeof raw.email === 'string' ? raw.email : '',
-    phone: typeof raw.phone === 'string' ? raw.phone : '',
-    address: typeof raw.address === 'string' ? raw.address : '',
-    accountNumber: typeof raw.accountNumber === 'string' ? raw.accountNumber : '',
-    paymentTerms: typeof raw.paymentTerms === 'string' ? raw.paymentTerms : '',
-    notes: typeof raw.notes === 'string' ? raw.notes : '',
-    active: raw.active !== false,
-  };
-}
-
-function loadState(): PosStateV1 {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return POS_SEED_V1;
-    const parsed = JSON.parse(raw) as PosStateV1;
-    if (!parsed || parsed.version !== 1) return POS_SEED_V1;
-    // Migrate older persisted inventory rows (missing dish fields)
-    const inventory = (parsed.inventory ?? []).map((inv: any) => {
-      const dishCategory = isDishCategory(String(inv.dishCategory ?? '')) ? inv.dishCategory : 'General';
-      const dishName = typeof inv.dishName === 'string' ? inv.dishName : '';
-      return { ...inv, dishCategory, dishName };
-    });
-    const vendors = Array.isArray((parsed as any).vendors)
-      ? ((parsed as any).vendors as any[]).map(normalizeVendor).filter((v): v is Vendor => v !== null)
-      : [];
-    const promotions = Array.isArray((parsed as any).promotions)
-      ? ((parsed as any).promotions as any[]).map(normalizePromotion).filter((p): p is Promotion => p !== null)
-      : POS_SEED_V1.promotions;
-    const orders = Array.isArray(parsed.orders)
-      ? (parsed.orders as any[]).map(normalizeOrder).filter((o): o is Order => o !== null)
-      : [];
-    const p = parsed as any;
-    const recipes = Array.isArray(p.recipes) ? p.recipes : POS_SEED_V1.recipes;
-    const menu = Array.isArray(p.menu) ? p.menu : POS_SEED_V1.menu;
-    const usage = Array.isArray(p.usage) ? p.usage : [];
-    return { version: 1, inventory, recipes, menu, orders, usage, vendors, promotions };
-  } catch {
-    return POS_SEED_V1;
-  }
-}
-
-function saveState(state: PosStateV1) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
 
 function byId<T extends { id: string }>(rows: T[]): Record<string, T> {
   return Object.fromEntries(rows.map(r => [r.id, r]));
@@ -541,11 +387,7 @@ function reducer(state: PosStateV1, action: Action): PosStateV1 {
 const PosContext = createContext<PosContextValue | null>(null);
 
 export function PosProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, loadState);
-
-  useEffect(() => {
-    saveState(state);
-  }, [state]);
+  const [state, dispatch] = useReducer(reducer, POS_SEED_V1);
 
   const actions: PosActions = useMemo(() => ({
     inventory: {

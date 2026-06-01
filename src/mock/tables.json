@@ -1,0 +1,11 @@
+{
+	"items": [
+		{ "id": "1", "label": "Table 1", "seats": 4 },
+		{ "id": "2", "label": "Table 2", "seats": 4 },
+		{ "id": "3", "label": "Table 3", "seats": 6 },
+		{ "id": "4", "label": "Table 4", "seats": 2 },
+		{ "id": "5", "label": "Table 5", "seats": 8 },
+		{ "id": "6", "label": "Table 6", "seats": 4 },
+		{ "id": "7", "label": "Table 7", "seats": 6 }
+	]
+}

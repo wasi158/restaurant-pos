@@ -1,0 +1,31 @@
+{
+  "hourlyData": [
+    { "time": "12pm", "revenue": 4000 },
+    { "time": "1pm",  "revenue": 3000 },
+    { "time": "2pm",  "revenue": 2200 },
+    { "time": "3pm",  "revenue": 2800 },
+    { "time": "4pm",  "revenue": 1900 },
+    { "time": "5pm",  "revenue": 2400 },
+    { "time": "6pm",  "revenue": 3600 },
+    { "time": "7pm",  "revenue": 5500 },
+    { "time": "8pm",  "revenue": 6500 },
+    { "time": "9pm",  "revenue": 4500 }
+  ],
+  "topItems": [
+    { "name": "Wagyu Burger",  "sold": 142, "pct": 95 },
+    { "name": "Truffle Pasta", "sold": 98,  "pct": 65 },
+    { "name": "Miso Cod",     "sold": 86,  "pct": 57 },
+    { "name": "Ribeye Steak", "sold": 74,  "pct": 49 }
+  ],
+  "stats": [
+    { "label": "Total Revenue",   "value": "—", "change": "+12.5%", "up": true  },
+    { "label": "Total Guests",    "value": "248",      "change": "+8.2%",  "up": true  },
+    { "label": "Avg. Check",      "value": "—",   "change": "-2.1%",  "up": false },
+    { "label": "Avg. Table Time", "value": "54 min",   "change": "+4.5%",  "up": true  }
+  ],
+  "recentOrders": [
+    { "id": "#1024", "table": "Table 10", "items": 3, "time": "12m ago", "amount": 84.5,  "paid": true  },
+    { "id": "#1025", "table": "Table 11", "items": 2, "time": "18m ago", "amount": 62.0,  "paid": true  },
+    { "id": "#1026", "table": "Table 12", "items": 5, "time": "24m ago", "amount": 121.0, "paid": false }
+  ]
+}

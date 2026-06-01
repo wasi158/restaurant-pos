@@ -1,4 +1,4 @@
-import type { BillOrder } from '../../components/BillSlipScreen';
+import type { BillOrder } from '../../components/pages/BillSlipScreen';
 import type { Order as PosOrder } from './types';
 
 /** Newest POS order by timestamp (not array index — persisted data may be any order). */
