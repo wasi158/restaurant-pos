@@ -73,7 +73,7 @@ export function Sidebar({
 						</div>
 						<div>
 							<p className='text-sm font-bold text-on-surface font-headline leading-none'>
-								Murshad POS
+								Restaurant-POS
 							</p>
 							<p className='text-[10px] text-on-surface-variant mt-0.5 tracking-widest uppercase'>
 								Admin Terminal
