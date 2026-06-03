@@ -10,7 +10,6 @@ import {
 	UsersRound,
 	BarChart2,
 	ContactRound,
-	SendHorizonal,
 	Settings2,
 	LifeBuoy,
 	ChefHat,
@@ -43,7 +42,6 @@ const navItems: NavItem[] = [
 interface SidebarProps {
 	activeTab: string;
 	setActiveTab: (tab: string) => void;
-	onSendToKitchen: () => void;
 	open: boolean;
 	onClose: () => void;
 }
@@ -51,7 +49,6 @@ interface SidebarProps {
 export function Sidebar({
 	activeTab,
 	setActiveTab,
-	onSendToKitchen,
 	open,
 	onClose,
 }: SidebarProps) {
@@ -112,17 +109,7 @@ export function Sidebar({
 				</nav>
 
 				{/* Footer */}
-				<div className='px-3 pb-5 pt-3 space-y-2 border-t border-outline-variant'>
-					{/* Send to Kitchen — opens modal */}
-					<button
-						onClick={onSendToKitchen}
-						className='w-full bg-primary text-on-primary-container py-2.5 rounded-xl font-semibold flex items-center justify-center gap-2 hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-md shadow-primary/25'
-					>
-						<SendHorizonal className='w-4 h-4' />
-						Send to Kitchen
-					</button>
-
-					{/* Settings + Support — navigate to screens */}
+				<div className='px-3 pb-5 pt-3 border-t border-outline-variant'>
 					<div className='flex gap-1'>
 						<button
 							onClick={() => setActiveTab('settings')}

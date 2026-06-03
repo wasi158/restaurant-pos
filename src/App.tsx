@@ -13,7 +13,6 @@ import { CustomersScreen } from './components/pages/CustomersScreen';
 import { SettingsScreen } from './components/pages/SettingsScreen';
 import { SupportScreen } from './components/pages/SupportScreen';
 import { KitchenScreen } from './components/pages/KitchenScreen';
-import { SendToKitchenModal } from './components/pages/SendToKitchenModal';
 import { RecipeBuilderScreen } from './components/pages/RecipeBuilderScreen';
 import { VendorsScreen } from './components/pages/VendorsScreen';
 import { DealsScreen } from './components/pages/DealsScreen';
@@ -25,7 +24,6 @@ import { printReceipt } from './lib/printReceipt';
 export default function App() {
   const [activeTab, setActiveTab]           = useState('dashboard');
   const [theme, setTheme]                   = useState<'dark' | 'light'>('dark');
-  const [kitchenModalOpen, setKitchenModal] = useState(false);
   const [currentOrder, setCurrentOrder]     = useState<BillOrder | null>(null);
   const [billAutoPrint, setBillAutoPrint]   = useState(false);
   const [sidebarOpen, setSidebarOpen]       = useState(false);
@@ -91,7 +89,6 @@ export default function App() {
       <Sidebar
         activeTab={activeTab}
         setActiveTab={(tab) => { setActiveTab(tab); setSidebarOpen(false); }}
-        onSendToKitchen={() => { setKitchenModal(true); setSidebarOpen(false); }}
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
@@ -118,12 +115,6 @@ export default function App() {
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary/5 blur-[80px] rounded-full -z-10 pointer-events-none" />
       </main>
 
-      {/* Send to Kitchen modal */}
-      <AnimatePresence>
-        {kitchenModalOpen && (
-          <SendToKitchenModal onClose={() => setKitchenModal(false)} />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

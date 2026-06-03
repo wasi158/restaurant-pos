@@ -17,7 +17,7 @@ const FAQS = [
   { q: 'Can I export my sales data?',                 a: 'Yes. Go to Reports & Analytics, select your date range (Today, This Week, This Month, or This Year), then click "Export CSV". A file will download with all KPIs, revenue trends, and top items.' },
   { q: 'How do I manage staff permissions?',          a: 'Go to Staff Management and click "Permissions". You can also manage terminal access users in Settings → User Management where you can add, activate/deactivate, or remove users.' },
   { q: 'How does the loyalty points system work?',    a: 'Customers earn 0.1 points per $1 spent. At 1000 points they qualify for a reward. You can view and manage points in the Customers section and send offers directly from the guest detail panel.' },
-  { q: 'How do I send an order to the kitchen?',      a: 'Build your order in the POS screen, then click "Send to Kitchen" in the sidebar. A confirmation modal will show all pending items. Confirm to send tickets to the kitchen printer and update order status.' },
+  { q: 'How do I send an order to the kitchen?',      a: 'Build your order on the Point of Sale screen, then tap "Charge and print". That completes the sale, prints the receipt, and sends a kitchen ticket to Kitchen KDS automatically.' },
   { q: 'What payment methods are supported?',         a: 'The POS supports Card (credit/debit), Cash, and Tap (contactless/NFC). Payment method buttons appear at checkout. You can configure default methods in Settings → POS & Payments.' },
 ];
 

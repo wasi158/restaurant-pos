@@ -5,24 +5,10 @@ import {
   Bell, RefreshCw, Monitor, Zap, Coffee, UtensilsCrossed,
 } from 'lucide-react';
 import kitchenData from '../../mock/kitchen.json';
-
-type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'Served';
-type Priority = 'rush' | 'normal';
-type KitchenItem = { name: string; qty: number; note?: string; done: boolean };
-type KitchenOrder = {
-  id: string; table: string; server: string; status: OrderStatus;
-  priority: Priority; placedAt: number; items: KitchenItem[];
-  station: string; guests: number;
-};
+import { useKitchen } from '../../lib/kitchen/store';
+import type { KitchenTicket, KitchenOrderStatus } from '../../lib/kitchen/types';
 
 const STATIONS: string[] = kitchenData.stations;
-const INITIAL_KITCHEN_ORDERS: KitchenOrder[] = kitchenData.items.map((item) => ({
-  ...item,
-  status: item.status as OrderStatus,
-  priority: item.priority as Priority,
-  placedAt: Date.now() + item.placedAtOffset,
-  items: item.items as KitchenItem[],
-}));
 
 
 function useTimer(placedAt: number) {
@@ -36,14 +22,14 @@ function useTimer(placedAt: number) {
   return { display: `${m}:${String(s).padStart(2, '0')}`, minutes: m };
 }
 
-const statusCfg: Record<OrderStatus, { label: string; color: string; bg: string; border: string; headerBg: string }> = {
+const statusCfg: Record<KitchenOrderStatus, { label: string; color: string; bg: string; border: string; headerBg: string }> = {
   Pending:   { label: 'Pending',   color: 'text-tertiary',  bg: 'bg-tertiary/10',  border: 'border-tertiary/40',  headerBg: 'bg-tertiary/15'  },
   Preparing: { label: 'Preparing', color: 'text-primary',   bg: 'bg-primary/10',   border: 'border-primary/40',   headerBg: 'bg-primary/15'   },
   Ready:     { label: 'Ready',     color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/40', headerBg: 'bg-secondary/15' },
   Served:    { label: 'Served',    color: 'text-on-surface-variant', bg: 'bg-surface-container-highest', border: 'border-outline-variant', headerBg: 'bg-surface-container-high' },
 };
 
-function TimerBadge({ placedAt, status }: { placedAt: number; status: OrderStatus }) {
+function TimerBadge({ placedAt, status }: { placedAt: number; status: KitchenOrderStatus }) {
   const { display, minutes } = useTimer(placedAt);
   const urgent = minutes >= 15 && status !== 'Ready';
   const warn   = minutes >= 10 && status !== 'Ready';
@@ -59,8 +45,8 @@ function TimerBadge({ placedAt, status }: { placedAt: number; status: OrderStatu
 }
 
 function OrderCard({ order, onStatusChange, onItemToggle }: {
-  order: KitchenOrder;
-  onStatusChange: (id: string, status: OrderStatus) => void;
+  order: KitchenTicket;
+  onStatusChange: (id: string, status: KitchenOrderStatus) => void;
   onItemToggle: (orderId: string, itemIdx: number) => void;
 }) {
   const cfg      = statusCfg[order.status];
@@ -171,27 +157,21 @@ function OrderCard({ order, onStatusChange, onItemToggle }: {
 }
 
 export function KitchenScreen() {
-  const [orders, setOrders]       = useState<KitchenOrder[]>(INITIAL_KITCHEN_ORDERS);
+  const { tickets: orders, actions } = useKitchen();
   const [station, setStation]     = useState('All');
-  const [view, setView]           = useState<'board' | 'list'>('board');
-  const [tick, setTick]           = useState(0);
+  const [, setTick]           = useState(0);
 
-  // Re-render every second for timers
   useEffect(() => {
     const id = setInterval(() => setTick(t => t + 1), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const onStatusChange = (id: string, status: OrderStatus) => {
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
+  const onStatusChange = (id: string, status: KitchenOrderStatus) => {
+    actions.setStatus(id, status);
   };
 
   const onItemToggle = (orderId: string, itemIdx: number) => {
-    setOrders(prev => prev.map(o =>
-      o.id === orderId
-        ? { ...o, items: o.items.map((it, i) => i === itemIdx ? { ...it, done: !it.done } : it) }
-        : o
-    ));
+    actions.toggleItem(orderId, itemIdx);
   };
 
   const filtered = orders.filter(o =>
@@ -204,7 +184,7 @@ export function KitchenScreen() {
   const ready     = filtered.filter(o => o.status === 'Ready').length;
   const rush      = filtered.filter(o => o.priority === 'rush').length;
 
-  const columns: { status: OrderStatus; orders: KitchenOrder[] }[] = [
+  const columns: { status: KitchenOrderStatus; orders: KitchenTicket[] }[] = [
     { status: 'Pending',   orders: filtered.filter(o => o.status === 'Pending')   },
     { status: 'Preparing', orders: filtered.filter(o => o.status === 'Preparing') },
     { status: 'Ready',     orders: filtered.filter(o => o.status === 'Ready')     },

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { BillOrder } from './BillSlipScreen';
 import { usePos } from '../../lib/pos/store';
+import { useKitchen } from '../../lib/kitchen/store';
 import { useAppSettings } from '../../lib/appSettings';
 import type { MenuItem, Promotion, ServiceChannel } from '../../lib/pos/types';
 import { menuItemAvailability } from '../../lib/pos/selectors';
@@ -29,6 +30,7 @@ function serviceChannelLabel(c: ServiceChannel): string {
 export function POSScreen({ onCharge }: Props) {
   const { formatMoney } = useAppSettings();
   const { state, actions } = usePos();
+  const { actions: kitchenActions } = useKitchen();
   const [activeCategory, setActiveCategory] = useState('All');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [serviceChannel, setServiceChannel] = useState<ServiceChannel>('dine_in');
@@ -173,6 +175,14 @@ export function POSScreen({ onCharge }: Props) {
       setChargeError(msg);
       return;
     }
+
+    kitchenActions.sendToKitchen({
+      orderId: result.order.id,
+      table: result.order.table,
+      serviceChannel: result.order.serviceChannel,
+      notes: result.order.deliveryNotes ?? undefined,
+      items: cart.map((c) => ({ name: c.name, qty: c.qty, category: c.category })),
+    });
 
     const order: BillOrder = {
       id: result.order.id,

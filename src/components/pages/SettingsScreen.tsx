@@ -181,9 +181,13 @@ export function SettingsScreen() {
                   <p className="text-sm font-semibold text-on-surface">{user.name}</p>
                   <p className="text-xs text-on-surface-variant">{user.role} · {user.email}</p>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-3 shrink-0">
                   <Badge variant={user.active ? 'success' : 'neutral'}>{user.active ? 'Active' : 'Inactive'}</Badge>
-                  <Toggle value={user.active} onChange={() => toggleUser(user.id)} />
+                  <Toggle
+                    value={user.active}
+                    onChange={() => toggleUser(user.id)}
+                    aria-label={`${user.active ? 'Deactivate' : 'Activate'} ${user.name}`}
+                  />
                   <Button variant="ghost" size="icon" onClick={() => removeUser(user.id)} className="hover:text-error hover:bg-error/10">
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
