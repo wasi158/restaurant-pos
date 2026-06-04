@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { AlertTriangle, XCircle, CheckCircle2, Plus, TrendingDown, Pencil, Trash2 } from 'lucide-react';
-import inventoryData from '../../mock/inventory.json';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Select } from '../atoms/Select';
+import { CategorySelectField } from '../molecules/CategorySelectField';
 import { Badge } from '../atoms/Badge';
 import { SearchBar } from '../molecules/SearchBar';
 import { StatCard } from '../molecules/StatCard';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import { FormField } from '../molecules/FormField';
 import { CategoryFilter } from '../molecules/CategoryFilter';
 import { Pagination } from '../molecules/Pagination';
 import { ModalShell } from '../organisms/ModalShell';
 import { ConfirmDialog } from '../organisms/ConfirmDialog';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 import { usePos } from '../../lib/pos/store';
 import { useAppSettings } from '../../lib/appSettings';
 import type { InventoryItem } from '../../lib/pos/types';
 import type { Unit } from '../../lib/pos/units';
-import { DISH_CATEGORIES, type DishCategory } from '../../lib/pos/constants';
-
-const CATEGORIES: string[] = inventoryData.categories;
+import type { DishCategory } from '../../lib/pos/constants';
+import { useInventoryCategories, useDishCategories } from '../../hooks/useCategoryList';
 const UNITS: Unit[] = ['kg', 'g', 'L', 'ml', 'pcs'];
 
 function getStatus(stock: number, min: number) {
@@ -35,12 +36,16 @@ const statusCfg = {
   out: { variant: 'error' as const,   label: 'Out of Stock', icon: XCircle },
 };
 
-function ItemModal({ title, form, setForm, onClose, onSave }: {
+function ItemModal({ title, form, setForm, onClose, onSave, stockCategories, dishCategories, onAddStockCategory, onAddDishCategory }: {
   title: string;
   form: Omit<InventoryItem, 'id'>;
   setForm: (f: Omit<InventoryItem, 'id'>) => void;
   onClose: () => void;
   onSave: () => void;
+  stockCategories: string[];
+  dishCategories: string[];
+  onAddStockCategory: (name: string) => { ok: true; name: string } | { ok: false; reason: string };
+  onAddDishCategory: (name: string) => { ok: true; name: string } | { ok: false; reason: string };
 }) {
   const { currency } = useAppSettings();
   const f = (field: keyof typeof form, val: string | number) => setForm({ ...form, [field]: val } as any);
@@ -51,10 +56,24 @@ function ItemModal({ title, form, setForm, onClose, onSave }: {
           <Input value={form.name} onChange={(v) => f('name', v)} placeholder="e.g. Wagyu Beef" fullWidth />
         </FormField>
         <FormField label="Category">
-          <Select value={form.category} onChange={(v) => f('category', v)} options={CATEGORIES} fullWidth />
+          <CategorySelectField
+            value={form.category}
+            onChange={(v) => f('category', v)}
+            categories={stockCategories}
+            onAddCategory={onAddStockCategory}
+            fullWidth
+            addModalTitle="Add stock category"
+          />
         </FormField>
         <FormField label="Dish Category">
-          <Select value={form.dishCategory} onChange={(v) => f('dishCategory', v as DishCategory)} options={DISH_CATEGORIES.map(c => ({ value: c, label: c }))} fullWidth />
+          <CategorySelectField
+            value={form.dishCategory}
+            onChange={(v) => f('dishCategory', v as DishCategory)}
+            categories={dishCategories}
+            onAddCategory={onAddDishCategory}
+            fullWidth
+            addModalTitle="Add dish category"
+          />
         </FormField>
         <FormField label="Dish Name (optional)" className="col-span-2">
           <Input value={form.dishName} onChange={(v) => f('dishName', v)} placeholder="e.g. Chicken Pizza / Zinger Burger" fullWidth />
@@ -83,12 +102,15 @@ export function InventoryScreen() {
   const { formatMoney } = useAppSettings();
   const { state, actions } = usePos();
   const items = state.inventory;
+  const { categories: stockCategories, addCategory: addStockCategory } = useInventoryCategories(items);
+  const { categories: dishCategories, addCategory: addDishCategory } = useDishCategories(state.recipes, items);
+  const defaultStockCategory = stockCategories[0] ?? 'Dry Goods';
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState<'add' | 'edit' | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<InventoryItem | null>(null);
   const [editTarget, setEditTarget] = useState<InventoryItem | null>(null);
-  const [form, setForm] = useState<Omit<InventoryItem, 'id'>>({ name: '', category: CATEGORIES[0] ?? 'Dry Goods', dishCategory: 'General', dishName: '', quantity: 0, unit: 'g', costPerUnit: 0, minLevel: 0, expiryDate: undefined });
+  const [form, setForm] = useState<Omit<InventoryItem, 'id'>>({ name: '', category: defaultStockCategory, dishCategory: 'General', dishName: '', quantity: 0, unit: 'g', costPerUnit: 0, minLevel: 0, expiryDate: undefined });
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 5;
 
@@ -106,7 +128,7 @@ export function InventoryScreen() {
   const lowCount = items.filter(i => getStatus(i.quantity, i.minLevel) === 'low').length;
   const outCount = items.filter(i => getStatus(i.quantity, i.minLevel) === 'out').length;
 
-  const openAdd = () => { setForm({ name: '', category: CATEGORIES[0] ?? 'Dry Goods', dishCategory: 'General', dishName: '', quantity: 0, unit: 'g', costPerUnit: 0, minLevel: 0, expiryDate: undefined }); setModal('add'); };
+  const openAdd = () => { setForm({ name: '', category: defaultStockCategory, dishCategory: 'General', dishName: '', quantity: 0, unit: 'g', costPerUnit: 0, minLevel: 0, expiryDate: undefined }); setModal('add'); };
   const openEdit = (item: InventoryItem) => {
     setEditTarget(item);
     setForm({ name: item.name, category: item.category, dishCategory: item.dishCategory, dishName: item.dishName, quantity: item.quantity, unit: item.unit, costPerUnit: item.costPerUnit, minLevel: item.minLevel, expiryDate: item.expiryDate });
@@ -132,22 +154,32 @@ export function InventoryScreen() {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-5 overflow-y-auto min-h-full">
+    <PageScroll className="p-4 sm:p-6 space-y-5">
       <PageHeader
         title="Inventory"
         subtitle="Track stock levels, costs and suppliers."
         actions={<Button onClick={openAdd} icon={<Plus className="w-4 h-4" />}>Add Item</Button>}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <CollapsibleStatsPanel
+        title="Stock overview"
+        storageKey="pos-stats-inventory"
+        gridClassName="grid grid-cols-1 sm:grid-cols-3 gap-4"
+      >
         <StatCard label="In Stock" value={okCount} icon={<CheckCircle2 className="w-4 h-4" />} />
         <StatCard label="Low Stock" value={lowCount} icon={<AlertTriangle className="w-4 h-4" />} />
         <StatCard label="Out of Stock" value={outCount} icon={<XCircle className="w-4 h-4" />} />
-      </div>
+      </CollapsibleStatsPanel>
 
       <div className="flex items-center gap-3 flex-wrap">
         <SearchBar value={search} onChange={setSearch} placeholder="Search items…" className="w-52" />
-        <CategoryFilter categories={['All', ...CATEGORIES]} active={category} onChange={setCategory} />
+        <CategoryFilter
+          categories={['All', ...stockCategories]}
+          active={category}
+          onChange={setCategory}
+          onAddCategory={addStockCategory}
+          addModalTitle="Add stock category"
+        />
       </div>
 
       <div className="bg-surface-container-low rounded-2xl border border-outline-variant overflow-hidden overflow-x-auto">
@@ -217,7 +249,17 @@ export function InventoryScreen() {
 
       <AnimatePresence>
         {(modal === 'add' || modal === 'edit') && (
-          <ItemModal title={modal === 'add' ? 'Add Inventory Item' : 'Edit Item'} form={form} setForm={setForm} onClose={() => setModal(null)} onSave={handleSave} />
+          <ItemModal
+            title={modal === 'add' ? 'Add Inventory Item' : 'Edit Item'}
+            form={form}
+            setForm={setForm}
+            onClose={() => setModal(null)}
+            onSave={handleSave}
+            stockCategories={stockCategories}
+            dishCategories={dishCategories}
+            onAddStockCategory={addStockCategory}
+            onAddDishCategory={addDishCategory}
+          />
         )}
         {deleteTarget && (
           <ConfirmDialog
@@ -228,6 +270,6 @@ export function InventoryScreen() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </PageScroll>
   );
 }

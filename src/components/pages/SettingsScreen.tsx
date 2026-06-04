@@ -13,6 +13,7 @@ import { Badge } from '../atoms/Badge';
 import { Avatar } from '../atoms/Avatar';
 import { FormField } from '../molecules/FormField';
 import { useAppSettings, SUPPORTED_CURRENCIES, type SupportedCurrency } from '../../lib/appSettings';
+import { PageScroll } from '../templates/PageScroll';
 
 const SECTIONS = [
   { id: 'restaurant', label: 'Restaurant Profile', icon: Store },
@@ -203,7 +204,8 @@ export function SettingsScreen() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-full overflow-x-hidden">
+    <PageScroll className="overflow-x-hidden">
+    <div className="flex flex-col md:flex-row">
       <div className="w-full md:w-56 bg-surface-container-low md:border-r border-b md:border-b-0 border-outline-variant flex md:flex-col shrink-0">
         <div className="p-5 border-b border-outline-variant">
           <h1 className="font-bold font-headline text-on-surface">Settings</h1>
@@ -223,14 +225,13 @@ export function SettingsScreen() {
         </nav>
       </div>
 
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1 overflow-y-auto p-8 max-w-2xl">
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="p-6 sm:p-8 max-w-2xl">
           <motion.div key={section} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.15 }}>
             {renderSection()}
           </motion.div>
-        </div>
 
-        <div className="border-t border-outline-variant px-8 py-4 flex items-center justify-between bg-surface-container-low">
+        <div className="border-t border-outline-variant mt-8 pt-6 flex flex-wrap items-center justify-between gap-4 bg-surface-container-low/50">
           <p className="text-xs text-on-surface-variant">
             Currency saves automatically. Other profile fields are session-only until wired to storage.
           </p>
@@ -243,7 +244,9 @@ export function SettingsScreen() {
             {saved ? 'Saved!' : 'Save Changes'}
           </Button>
         </div>
+        </div>
       </div>
     </div>
+    </PageScroll>
   );
 }

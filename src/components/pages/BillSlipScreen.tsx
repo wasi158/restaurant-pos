@@ -4,6 +4,7 @@ import { Printer, ArrowLeft, CheckCircle2, ShoppingBag, MapPin, Phone, Globe, Cr
 import { useAppSettings } from '../../lib/appSettings';
 import { printReceipt } from '../../lib/printReceipt';
 import type { ServiceChannel } from '../../lib/pos/types';
+import { PageScroll } from '../templates/PageScroll';
 
 type BillItem = {
   id: number;
@@ -12,9 +13,13 @@ type BillItem = {
   qty: number;
 };
 
+export type BillKind = 'customer_due' | 'paid';
+
 export type BillOrder = {
   id: string;
   table: string;
+  /** Customer check before payment vs paid receipt after Receive Payment. */
+  billKind?: BillKind;
   items: BillItem[];
   /** List subtotal before promotion (optional for legacy mock receipts). */
   grossSubtotal?: number;
@@ -35,9 +40,10 @@ export type BillOrder = {
 type Props = {
   order: BillOrder | null;
   onNewOrder: () => void;
+  onReceivePayment?: () => void;
 };
 
-export function BillSlipScreen({ order, onNewOrder }: Props) {
+export function BillSlipScreen({ order, onNewOrder, onReceivePayment }: Props) {
   const { formatMoney } = useAppSettings();
 
   const taxPctLabel =
@@ -52,15 +58,18 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
         ? 'Delivery'
         : 'Dine-in';
   const midColumnLabel = !order?.serviceChannel || order.serviceChannel === 'dine_in' ? 'Table' : 'Service';
+  const isCustomerDue = order?.billKind === 'customer_due';
 
   if (!order) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 text-on-surface-variant">
-        <p>No active bill to display.</p>
-        <button onClick={onNewOrder} className="px-6 py-2 bg-primary text-on-primary rounded-xl font-bold">
-          Go to POS
-        </button>
-      </div>
+      <PageScroll>
+        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 text-on-surface-variant px-6">
+          <p>No active bill to display.</p>
+          <button onClick={onNewOrder} className="px-6 py-2 bg-primary text-on-primary rounded-xl font-bold">
+            Go to POS
+          </button>
+        </div>
+      </PageScroll>
     );
   }
 
@@ -78,30 +87,40 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
   };
 
   return (
-    <div className="flex flex-col min-h-full overflow-x-hidden bg-surface bill-slip-screen">
-      <div className="p-6 flex items-center justify-between border-b border-outline-variant no-print">
+    <PageScroll className="bg-surface bill-slip-screen">
+      <div className="p-4 sm:p-6 flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant no-print sticky top-0 z-10 bg-surface/95 backdrop-blur-sm">
         <button onClick={onNewOrder} className="flex items-center gap-2 text-sm font-semibold text-on-surface hover:text-primary transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to POS
         </button>
-        <div className="flex items-center gap-2 text-secondary font-bold">
-          <CheckCircle2 className="w-6 h-6" />
-          Order Paid Successfully
-        </div>
-        <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-surface-container-high border border-outline-variant rounded-xl text-sm font-bold hover:bg-surface-bright transition-all">
-          <Printer className="w-4 h-4" /> Print Receipt
+        {isCustomerDue ? (
+          <div className="flex items-center gap-2 text-tertiary font-bold text-sm text-center">
+            <ShoppingBag className="w-5 h-5 shrink-0" />
+            Customer bill — amount to pay
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 text-secondary font-bold text-sm text-center">
+            <CheckCircle2 className="w-5 h-5 shrink-0" />
+            Order paid successfully
+          </div>
+        )}
+        <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-surface-container-high border border-outline-variant rounded-xl text-sm font-bold hover:bg-surface-bright transition-all shrink-0">
+          <Printer className="w-4 h-4" /> {isCustomerDue ? 'Print bill' : 'Print receipt'}
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-8 flex justify-center bg-surface-container-lowest print:p-0 print:bg-white">
-        {/* Receipt Mock */}
+      <div className="p-6 sm:p-8 flex justify-center bg-surface-container-lowest print:p-0 print:bg-white">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md bg-white text-slate-900 rounded-sm shadow-2xl p-10 font-mono print:shadow-none print:p-0 receipt-container"
+          className="w-full max-w-md bg-white text-slate-900 rounded-sm shadow-2xl p-8 sm:p-10 font-mono print:shadow-none print:p-0 receipt-container"
         >
-          {/* Header */}
           <div className="text-center space-y-2 border-b-2 border-dashed border-slate-200 pb-6 mb-6">
             <h1 className="text-2xl font-black tracking-tighter uppercase italic">Restaurant POS</h1>
+            {isCustomerDue && (
+              <p className="text-sm font-black uppercase tracking-widest text-amber-800 border border-amber-300 bg-amber-50 px-3 py-1 rounded mt-2">
+                Customer bill — amount to pay
+              </p>
+            )}
             <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Restaurant Point of Sale</p>
             <div className="flex flex-col gap-1 mt-4 text-[10px] text-slate-400 font-bold uppercase">
               <span className="flex items-center justify-center gap-1"><MapPin className="w-3 h-3" /> 124 Science Park, London</span>
@@ -110,17 +129,16 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
             </div>
           </div>
 
-          {/* Order Info */}
-          <div className="flex justify-between text-xs font-bold uppercase mb-4">
-            <div className="space-y-1">
+          <div className="flex justify-between text-xs font-bold uppercase mb-4 gap-2">
+            <div className="space-y-1 min-w-0">
               <p className="text-slate-400">Order ID</p>
-              <p>{order.id}</p>
+              <p className="break-all">{order.id}</p>
             </div>
-            <div className="text-center space-y-1 px-1">
+            <div className="text-center space-y-1 px-1 shrink-0">
               <p className="text-slate-400">{midColumnLabel}</p>
               <p className="normal-case font-semibold text-[11px] leading-snug">{order.table}</p>
             </div>
-            <div className="text-right space-y-1">
+            <div className="text-right space-y-1 shrink-0">
               <p className="text-slate-400">Date/Time</p>
               <p>{order.time}</p>
             </div>
@@ -152,7 +170,6 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
             </div>
           )}
 
-          {/* Items Table */}
           <table className="w-full mb-8">
             <thead>
               <tr className="text-[10px] text-slate-400 uppercase border-b border-slate-100 italic">
@@ -172,7 +189,6 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
             </tbody>
           </table>
 
-          {/* Totals */}
           <div className="space-y-2 border-t-2 border-dashed border-slate-200 pt-6">
             {showDiscount && order.grossSubtotal != null && (
               <div className="flex justify-between text-sm">
@@ -193,41 +209,74 @@ export function BillSlipScreen({ order, onNewOrder }: Props) {
               <span className="font-bold">{formatMoney(order.subtotal)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-white uppercase font-bold">Tax ({taxPctLabel}%)</span>
-              <span className="font-bold text-white">{formatMoney(order.tax)}</span>
+              <span className="text-slate-400 uppercase font-bold">Tax ({taxPctLabel}%)</span>
+              <span className="font-bold">{formatMoney(order.tax)}</span>
             </div>
-            <div className="flex justify-between text-lg pt-4">
-              <span className="text-white uppercase tracking-tighter">Total Amount</span>
-              <span className="text-white underline decoration-2 decoration-primary decoration-offset-4">{formatMoney(order.total)}</span>
+            <div className={`flex justify-between text-lg pt-4 gap-2 ${isCustomerDue ? 'border-t-2 border-dashed border-slate-300 mt-2' : ''}`}>
+              <span className={`uppercase tracking-tighter font-black ${isCustomerDue ? 'text-slate-800' : 'text-slate-900'}`}>
+                {isCustomerDue ? 'Amount to pay' : 'Total amount'}
+              </span>
+              <span className={`font-black tabular-nums shrink-0 ${isCustomerDue ? 'text-xl text-amber-700 underline decoration-2 decoration-amber-500' : 'text-slate-900 underline decoration-2 decoration-primary decoration-offset-4'}`}>
+                {formatMoney(order.total)}
+              </span>
             </div>
           </div>
 
-          {/* Payment Info */}
-          <div className="mt-8 flex items-center justify-between p-3 bg-slate-50 rounded italic text-xs">
-            <span className="flex items-center gap-2 uppercase font-bold">
-              Payment: <span className="flex items-center gap-1"><PaymentIcon /> {order.paymentMethod}</span>
-            </span>
-            <span className="font-bold">STATUS: PAID</span>
+          {isCustomerDue && (
+            <div className="mt-6 p-4 border-2 border-dashed border-amber-400/60 bg-amber-50 rounded text-center">
+              <p className="text-[10px] font-black uppercase tracking-widest text-amber-800">Payment not yet received</p>
+              <p className="text-xs text-amber-900/80 mt-1 font-semibold">Please pay this amount at the counter when ready.</p>
+            </div>
+          )}
+
+          <div className={`mt-8 flex flex-wrap items-center justify-between gap-2 p-3 rounded italic text-xs ${isCustomerDue ? 'bg-amber-50 border border-amber-200' : 'bg-slate-50'}`}>
+            {isCustomerDue ? (
+              <>
+                <span className="uppercase font-bold text-amber-900">Payment: due at checkout</span>
+                <span className="font-black text-amber-800">STATUS: UNPAID</span>
+              </>
+            ) : (
+              <>
+                <span className="flex items-center gap-2 uppercase font-bold text-slate-800">
+                  Payment: <span className="flex items-center gap-1"><PaymentIcon /> {order.paymentMethod}</span>
+                </span>
+                <span className="font-bold text-secondary">STATUS: PAID</span>
+              </>
+            )}
           </div>
 
-          {/* Footer */}
           <div className="mt-12 text-center">
             <div className="flex justify-center gap-1 mb-4 opacity-20 grayscale">
               {[...Array(24)].map((_, i) => (
                 <div key={i} className={`w-1 h-8 ${i % 3 === 0 ? 'bg-black' : 'bg-black/40'}`} />
               ))}
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Thank you for dining with us</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+              {isCustomerDue ? 'This is not a tax invoice until paid' : 'Thank you for dining with us'}
+            </p>
             <p className="text-[8px] mt-2 text-slate-300 uppercase">Prices inclusive of VAT • No service charge</p>
           </div>
         </motion.div>
       </div>
 
-      <div className="p-6 bg-surface border-t border-outline-variant flex justify-center no-print">
-        <button onClick={onNewOrder} className="px-10 py-3 bg-primary text-on-primary-container font-black uppercase tracking-widest rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all text-sm">
-          Start New Order
+      <div className="px-4 sm:px-6 py-6 sm:py-8 bg-surface border-t border-outline-variant flex flex-wrap justify-center gap-3 no-print">
+        {isCustomerDue && onReceivePayment && (
+          <button
+            type="button"
+            onClick={onReceivePayment}
+            className="px-8 py-3 bg-secondary text-white font-black uppercase tracking-widest rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all text-sm"
+          >
+            Receive payment
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={onNewOrder}
+          className="px-10 py-3 bg-primary text-on-primary-container font-black uppercase tracking-widest rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all text-sm"
+        >
+          {isCustomerDue ? 'Back to POS' : 'Start new order'}
         </button>
       </div>
-    </div>
+    </PageScroll>
   );
 }

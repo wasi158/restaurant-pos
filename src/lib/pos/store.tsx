@@ -7,6 +7,7 @@ import type {
   Order,
   OrderItem,
   PlaceOrderInput,
+  ReceivePaymentInput,
   PosStateV1,
   Promotion,
   Recipe,
@@ -55,6 +56,8 @@ function byId<T extends { id: string }>(rows: T[]): Record<string, T> {
 
 type PlaceOrderOk = { ok: true; order: Order };
 type PlaceOrderErr = { ok: false; reason: string; details?: any };
+type ReceivePaymentOk = { ok: true; order: Order };
+type ReceivePaymentErr = { ok: false; reason: string };
 
 type PosActions = {
   inventory: {
@@ -79,6 +82,7 @@ type PosActions = {
   };
   orders: {
     place: (input: PlaceOrderInput) => PlaceOrderOk | PlaceOrderErr;
+    receivePayment: (input: ReceivePaymentInput) => ReceivePaymentOk | ReceivePaymentErr;
   };
   system: {
     reset: () => void;
@@ -102,6 +106,7 @@ type Action =
   | { type: 'promotions.upsert'; item: Promotion }
   | { type: 'promotions.remove'; id: string }
   | { type: 'orders.place'; input: PlaceOrderInput; resultRef: { current: PlaceOrderOk | PlaceOrderErr } }
+  | { type: 'orders.receivePayment'; input: ReceivePaymentInput; resultRef: { current: ReceivePaymentOk | ReceivePaymentErr } }
   | { type: 'system.reset' };
 
 function validateRecipeIngredients(ings: RecipeIngredient[], invBy: Record<string, InventoryItem>): string | null {
@@ -338,7 +343,10 @@ function reducer(state: PosStateV1, action: Action): PosStateV1 {
         id: orderId,
         createdAtIso: new Date().toISOString(),
         table: receiptTableLabel(action.input, channel),
-        paymentMethod: action.input.paymentMethod,
+        paymentStatus: 'pending',
+        paymentMethod: '',
+        paidAtIso: null,
+        amountTendered: null,
         items: fullItems,
         grossSubtotal: pricing.grossSubtotal,
         discountTotal: pricing.discountTotal,
@@ -377,6 +385,50 @@ function reducer(state: PosStateV1, action: Action): PosStateV1 {
         action.resultRef.current = { ok: false, reason: msg || 'Could not complete sale.' };
         return state;
       }
+    }
+
+    case 'orders.receivePayment': {
+      const orders = state.orders ?? [];
+      const idx = orders.findIndex(o => o.id === action.input.orderId);
+      if (idx < 0) {
+        action.resultRef.current = { ok: false, reason: 'Order not found.' };
+        return state;
+      }
+      const order = orders[idx]!;
+      const status = order.paymentStatus ?? 'paid';
+      if (status === 'paid') {
+        action.resultRef.current = { ok: false, reason: 'This order is already paid.' };
+        return state;
+      }
+      const method = String(action.input.paymentMethod ?? '').trim();
+      if (!method) {
+        action.resultRef.current = { ok: false, reason: 'Select a payment method.' };
+        return state;
+      }
+      let amountTendered: number | null = null;
+      if (method === 'Cash') {
+        const tendered = action.input.amountTendered ?? 0;
+        if (!Number.isFinite(tendered) || tendered < order.total - 0.005) {
+          action.resultRef.current = {
+            ok: false,
+            reason: `Cash received must be at least ${round2(order.total)}.`,
+          };
+          return state;
+        }
+        amountTendered = round2(tendered);
+      }
+      const paidAtIso = new Date().toISOString();
+      const updated: Order = {
+        ...order,
+        paymentStatus: 'paid',
+        paymentMethod: method,
+        paidAtIso,
+        amountTendered,
+      };
+      const nextOrders = [...orders];
+      nextOrders[idx] = updated;
+      action.resultRef.current = { ok: true, order: updated };
+      return { ...state, orders: nextOrders };
     }
 
     default:
@@ -427,6 +479,15 @@ export function PosProvider({ children }: { children: React.ReactNode }) {
           };
         }
         return out;
+      },
+      receivePayment: (input) => {
+        const resultRef: { current: ReceivePaymentOk | ReceivePaymentErr } = {
+          current: { ok: false, reason: 'Payment could not be recorded.' },
+        };
+        flushSync(() => {
+          dispatch({ type: 'orders.receivePayment', input, resultRef });
+        });
+        return resultRef.current;
       },
     },
     system: {

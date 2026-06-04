@@ -9,8 +9,10 @@ import reportsJson from '../../mock/reports.json';
 import { Button } from '../atoms/Button';
 import { Badge } from '../atoms/Badge';
 import { StatCard } from '../molecules/StatCard';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import { CategoryFilter } from '../molecules/CategoryFilter';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 
 const PERIODS = reportsJson.periods as readonly string[];
 type Period = (typeof PERIODS)[number];
@@ -148,7 +150,7 @@ export function ReportsScreen() {
   );
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 overflow-y-auto min-h-full">
+    <PageScroll className="p-4 sm:p-6 space-y-6">
       <PageHeader
         title="Reports & Analytics"
         subtitle={`Amounts use ${currency} (Settings → Restaurant Profile). Demo charts use sample data; Profit and loss below is from real POS orders.`}
@@ -167,14 +169,15 @@ export function ReportsScreen() {
         }
       />
 
-      <AnimatePresence mode="wait">
-        <motion.div key={period + '-kpi'} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {kpis.map((k, i) => (
-            <StatCard key={i} label={k.label} value={k.value} change={k.val} up={k.up} icon={<k.icon className="w-4 h-4" />} />
-          ))}
-        </motion.div>
-      </AnimatePresence>
+      <CollapsibleStatsPanel
+        title="Report KPIs"
+        storageKey="pos-stats-reports-kpi"
+        gridClassName="grid grid-cols-2 lg:grid-cols-4 gap-4"
+      >
+        {kpis.map((k, i) => (
+          <StatCard key={i} label={k.label} value={k.value} change={k.val} up={k.up} icon={<k.icon className="w-4 h-4" />} />
+        ))}
+      </CollapsibleStatsPanel>
 
       {/* Live P&L from POS */}
       <AnimatePresence mode="wait">
@@ -210,7 +213,12 @@ export function ReportsScreen() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <CollapsibleStatsPanel
+            title="P&L figures"
+            storageKey="pos-stats-reports-pnl"
+            gridClassName="grid grid-cols-2 lg:grid-cols-4 gap-3"
+            className="!space-y-3"
+          >
             {[
               { label: 'Revenue (subtotal)', value: formatMoney(livePnL.revenueSubtotal), hint: 'Pre-tax sales' },
               { label: 'Cost of goods sold', value: formatMoney(livePnL.cogs), hint: 'From stock usage' },
@@ -233,7 +241,7 @@ export function ReportsScreen() {
                 <p className="text-[10px] text-on-surface-variant mt-1">{row.hint}</p>
               </div>
             ))}
-          </div>
+          </CollapsibleStatsPanel>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
             <div className="rounded-xl border border-outline-variant bg-surface-container-high p-4">
@@ -415,6 +423,6 @@ export function ReportsScreen() {
           </div>
         </motion.div>
       </AnimatePresence>
-    </div>
+    </PageScroll>
   );
 }

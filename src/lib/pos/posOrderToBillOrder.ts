@@ -1,5 +1,6 @@
-import type { BillOrder } from '../../components/pages/BillSlipScreen';
+import type { BillKind, BillOrder } from '../../components/pages/BillSlipScreen';
 import type { Order as PosOrder } from './types';
+import { isOrderPending } from './orderPayment';
 
 /** Newest POS order by timestamp (not array index — persisted data may be any order). */
 export function getLatestPosOrder(orders: PosOrder[]): PosOrder | null {
@@ -12,10 +13,12 @@ export function getLatestPosOrder(orders: PosOrder[]): PosOrder | null {
   })[0];
 }
 
-export function posOrderToBillOrder(o: PosOrder): BillOrder {
+export function posOrderToBillOrder(o: PosOrder, opts?: { billKind?: BillKind }): BillOrder {
+  const billKind = opts?.billKind ?? (isOrderPending(o) ? 'customer_due' : 'paid');
   return {
     id: o.id,
     table: o.table,
+    billKind,
     items: o.items.map((it, idx) => ({
       id: idx,
       name: it.nameSnapshot,

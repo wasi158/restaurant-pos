@@ -3,6 +3,7 @@ build/
 dist/
 dist-electron/
 release/
+release-build/
 coverage/
 .DS_Store
 *.log

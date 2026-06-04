@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import kitchenData from '../../mock/kitchen.json';
 import { useKitchen } from '../../lib/kitchen/store';
+import { PageScroll } from '../templates/PageScroll';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import type { KitchenTicket, KitchenOrderStatus } from '../../lib/kitchen/types';
 
 const STATIONS: string[] = kitchenData.stations;
@@ -191,7 +193,7 @@ export function KitchenScreen() {
   ];
 
   return (
-    <div className="flex flex-col min-h-full overflow-x-hidden bg-surface-container-lowest">
+    <PageScroll className="flex flex-col overflow-x-hidden bg-surface-container-lowest">
 
       {/* KDS Header */}
       <div className="bg-surface-container-low border-b border-outline-variant px-4 sm:px-6 py-4 flex flex-wrap items-center gap-4 shrink-0">
@@ -205,8 +207,12 @@ export function KitchenScreen() {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="hidden sm:flex items-center gap-2 flex-wrap">
+        <CollapsibleStatsPanel
+          title="Kitchen counts"
+          storageKey="pos-stats-kitchen"
+          layout="inline"
+          className="flex-1 min-w-0 sm:max-w-xl"
+        >
           {[
             { label: 'Pending',   value: pending,   color: 'text-tertiary',  bg: 'bg-tertiary/10'  },
             { label: 'Preparing', value: preparing, color: 'text-primary',   bg: 'bg-primary/10'   },
@@ -218,7 +224,7 @@ export function KitchenScreen() {
               <span className={`text-[10px] font-bold uppercase ${s.color}`}>{s.label}</span>
             </div>
           ))}
-        </div>
+        </CollapsibleStatsPanel>
 
         {/* Station filter */}
         <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
@@ -234,7 +240,7 @@ export function KitchenScreen() {
       </div>
 
       {/* Board */}
-      <div className="flex-1 overflow-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-[min(100%,480px)]">
         {columns.map(col => {
           const cfg = statusCfg[col.status];
           return (
@@ -253,7 +259,7 @@ export function KitchenScreen() {
               </div>
 
               {/* Cards */}
-              <div className="flex-1 overflow-y-auto p-3 space-y-3">
+              <div className="p-3 space-y-3 min-h-[12rem]">
                 <AnimatePresence>
                   {/* Rush orders first */}
                   {[...col.orders]
@@ -298,6 +304,6 @@ export function KitchenScreen() {
           Auto-refresh every 1s
         </div>
       </div>
-    </div>
+    </PageScroll>
   );
 }

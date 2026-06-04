@@ -9,6 +9,8 @@ import { Input } from '../atoms/Input';
 import { Card } from '../atoms/Card';
 import { FormField } from '../molecules/FormField';
 import { PageHeader } from '../organisms/PageHeader';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
+import { PageScroll } from '../templates/PageScroll';
 
 const FAQS = [
   { q: 'How do I process a refund?',                  a: 'Go to Orders, select the order, click the "..." menu and choose "Issue Refund". Enter the amount and confirm. The refund will be processed to the original payment method within 3–5 business days.' },
@@ -44,10 +46,14 @@ export function SupportScreen() {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-8 overflow-y-auto min-h-full max-w-4xl">
+    <PageScroll className="p-4 sm:p-6 space-y-8 max-w-4xl mx-auto w-full">
       <PageHeader title="Support Center" subtitle="Get help, browse resources, or contact our team." />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <CollapsibleStatsPanel
+        title="Quick contact"
+        storageKey="pos-stats-support"
+        gridClassName="grid grid-cols-1 md:grid-cols-3 gap-4"
+      >
         {[
           { icon: MessageCircle, label: 'Live Chat',    desc: 'Chat with support',      action: 'Start Chat',    color: 'text-primary',   bg: 'bg-primary/10'   },
           { icon: Mail,          label: 'Email Support',desc: 'support@restaurant-pos.com', action: 'Send Email', color: 'text-secondary', bg: 'bg-secondary/10' },
@@ -62,7 +68,7 @@ export function SupportScreen() {
             <Button variant="ghost" size="sm" className="text-primary px-0">{c.action} →</Button>
           </Card>
         ))}
-      </div>
+      </CollapsibleStatsPanel>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
@@ -140,6 +146,6 @@ export function SupportScreen() {
           </div>
         </div>
       </div>
-    </div>
+    </PageScroll>
   );
 }

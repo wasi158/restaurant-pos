@@ -1,6 +1,7 @@
 import reportsJson from '../../mock/reports.json';
 type Period = (typeof reportsJson.periods)[number];
 import type { InventoryItem, InventoryUsage, PosStateV1 } from './types';
+import { isOrderPaid } from './orderPayment';
 import { byId } from './selectors';
 import { convertQty } from './units';
 import type { Unit } from './units';
@@ -102,7 +103,7 @@ function cogsForUsage(usage: InventoryUsage[], orderIds: Set<string>, invBy: Rec
 
 export function computePnL(state: PosStateV1, period: Period, now = new Date()): PnLSummary {
   const { start, end, label } = periodRange(period, now);
-  const orders = state.orders.filter(o => inRange(o.createdAtIso, start, end));
+  const orders = state.orders.filter(o => inRange(o.createdAtIso, start, end) && isOrderPaid(o));
   const orderIds = new Set(orders.map(o => o.id));
 
   const revenueSubtotal = orders.reduce((s, o) => s + o.subtotal, 0);

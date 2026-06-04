@@ -57,7 +57,7 @@ export function TopBar({ theme, toggleTheme, onMenuClick }: TopBarProps) {
   };
 
   return (
-    <header className="h-14 bg-surface-container-low/95 backdrop-blur-xl flex items-center justify-between px-5 border-b border-outline-variant sticky top-0 z-40 drag-region shrink-0">
+    <header className="h-14 flex-none bg-surface-container-low/95 backdrop-blur-xl flex items-center justify-between px-5 border-b border-outline-variant shrink-0 z-40 drag-region">
 
       {/* Mobile menu + Search */}
       <div className="flex items-center gap-2 flex-1 no-drag min-w-0">

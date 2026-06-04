@@ -1,8 +1,12 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Plus, Trash2, Save, ChefHat, Clock, Package, X, Minus, DollarSign } from 'lucide-react';
-import { DISH_CATEGORIES, type DishCategory } from '../../lib/pos/constants';
+import type { DishCategory } from '../../lib/pos/constants';
+import { CategoryFilter } from '../molecules/CategoryFilter';
+import { CategorySelectField } from '../molecules/CategorySelectField';
 import { Pagination } from '../molecules/Pagination';
+import { useDishCategories } from '../../hooks/useCategoryList';
+import { PageScroll } from '../templates/PageScroll';
 import { usePos } from '../../lib/pos/store';
 import { useAppSettings } from '../../lib/appSettings';
 import type { Recipe, RecipeIngredient, InventoryItem } from '../../lib/pos/types';
@@ -60,6 +64,7 @@ export function RecipeBuilderScreen() {
   const { state, actions } = usePos();
   const { recipes, inventory } = state;
   const invById = useMemo(() => byId(inventory), [inventory]);
+  const { categories: dishCategories, addCategory: addDishCategory } = useDishCategories(recipes, inventory);
 
   const [recipeSearch, setRecipeSearch] = useState('');
   const [pickerQuery, setPickerQuery] = useState('');
@@ -186,9 +191,10 @@ export function RecipeBuilderScreen() {
   // ---------- render ----------
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-full overflow-x-hidden">
+    <PageScroll className="overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row lg:min-h-full">
       {/* ===== Left: Recipe List ===== */}
-      <div className="w-full lg:w-[380px] flex flex-col lg:border-r border-b lg:border-b-0 border-outline-variant bg-surface shrink-0 max-h-[40vh] lg:max-h-none">
+      <div className="w-full lg:w-[380px] flex flex-col lg:border-r border-b lg:border-b-0 border-outline-variant bg-surface shrink-0">
         <div className="p-6 border-b border-outline-variant">
           <div className="flex justify-between items-center mb-4">
             <div>
@@ -206,18 +212,17 @@ export function RecipeBuilderScreen() {
               className="w-full bg-surface-container-high border border-outline-variant rounded-xl py-2.5 pl-10 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/40" />
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {['All', ...DISH_CATEGORIES].map(c => (
-              <button key={c} onClick={() => setCategoryFilter(c)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${categoryFilter === c ? 'bg-primary text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-surface'}`}>
-                {c}
-              </button>
-            ))}
-          </div>
+          <CategoryFilter
+            categories={['All', ...dishCategories]}
+            active={categoryFilter}
+            onChange={setCategoryFilter}
+            onAddCategory={addDishCategory}
+            addModalTitle="Add dish category"
+          />
         </div>
 
-        <div className="flex-1 flex flex-col min-h-0 bg-surface-container-lowest">
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div className="flex flex-col bg-surface-container-lowest">
+          <div className="p-4 space-y-2">
             <AnimatePresence>
               {paginatedData.map(r => {
                 const cost = recipeCostById[r.id] ?? 0;
@@ -249,7 +254,7 @@ export function RecipeBuilderScreen() {
       </div>
 
       {/* ===== Right: Builder ===== */}
-      <div className="flex-1 flex flex-col bg-surface-container-lowest overflow-hidden">
+      <div className="flex-1 flex flex-col bg-surface-container-lowest min-w-0">
         {/* Header bar */}
         <div className="h-20 flex items-center justify-between px-8 border-b border-outline-variant shrink-0 bg-surface">
           <div>
@@ -277,7 +282,7 @@ export function RecipeBuilderScreen() {
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto p-6 lg:p-8 space-y-6 max-w-5xl mx-auto w-full">
+        <div className="p-6 lg:p-8 space-y-6 max-w-5xl mx-auto w-full">
 
           {/* General Details + Cost Summary side by side */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
@@ -293,10 +298,14 @@ export function RecipeBuilderScreen() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="text-xs font-semibold text-on-surface-variant mb-1.5 block">Category</label>
-                  <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value as DishCategory }))}
-                    className="w-full bg-surface-container-high border border-outline-variant rounded-xl px-3 py-2.5 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40">
-                    {DISH_CATEGORIES.map(c => <option key={c} className="bg-surface text-on-surface">{c}</option>)}
-                  </select>
+                  <CategorySelectField
+                    value={form.category}
+                    onChange={(v) => setForm(f => ({ ...f, category: v as DishCategory }))}
+                    categories={dishCategories}
+                    onAddCategory={addDishCategory}
+                    fullWidth
+                    addModalTitle="Add dish category"
+                  />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-on-surface-variant mb-1.5 block">Prep (mins)</label>
@@ -483,5 +492,6 @@ export function RecipeBuilderScreen() {
         </div>
       </div>
     </div>
+    </PageScroll>
   );
 }

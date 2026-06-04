@@ -22,6 +22,7 @@ import { Pagination } from '../molecules/Pagination';
 import { ModalShell } from '../organisms/ModalShell';
 import { ConfirmDialog } from '../organisms/ConfirmDialog';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 import { usePos } from '../../lib/pos/store';
 import type { Promotion } from '../../lib/pos/types';
 import { useAppSettings } from '../../lib/appSettings';
@@ -585,8 +586,9 @@ export function DealsScreen() {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-full overflow-x-hidden">
-      <div className="flex-1 flex flex-col overflow-hidden lg:border-r border-outline-variant">
+    <PageScroll className="overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row lg:min-h-full">
+      <div className="flex-1 flex flex-col lg:border-r border-outline-variant">
         <div className="p-6 pb-4 border-b border-outline-variant">
           <PageHeader
             title="Deals & promotions"
@@ -617,8 +619,8 @@ export function DealsScreen() {
           />
         </div>
 
-        <div className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div className="flex flex-col">
+          <div className="p-4 space-y-2">
             {paginatedData.map((p, i) => (
               <motion.button
                 key={p.id}
@@ -689,7 +691,7 @@ export function DealsScreen() {
           <p className="text-xs text-on-surface-variant mt-0.5">Edit or remove the selected deal</p>
         </div>
         {selected ? (
-          <div className="flex-1 overflow-y-auto p-5 space-y-4">
+          <div className="p-5 space-y-4">
             <div>
               <p className="text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Name</p>
               <p className="font-bold text-on-surface mt-1">{selected.name}</p>
@@ -822,5 +824,6 @@ export function DealsScreen() {
         )}
       </AnimatePresence>
     </div>
+    </PageScroll>
   );
 }

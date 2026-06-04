@@ -1,24 +1,28 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'motion/react';
 import {
-  Plus, Minus, Trash2, CreditCard, Banknote, Smartphone, ShoppingBag,
-  Sandwich, Pizza, Utensils, CupSoda, Armchair, Truck, Search, ChevronLeft, ChevronRight, Printer,
+  Plus, Minus, Trash2, ShoppingBag,
+  Sandwich, Pizza, Utensils, CupSoda, Armchair, Truck, Search, ChevronLeft, ChevronRight, SendHorizonal, Printer,
 } from 'lucide-react';
-import { BillOrder } from './BillSlipScreen';
 import { usePos } from '../../lib/pos/store';
 import { useKitchen } from '../../lib/kitchen/store';
 import { useAppSettings } from '../../lib/appSettings';
 import type { MenuItem, Promotion, ServiceChannel } from '../../lib/pos/types';
+import { posOrderToBillOrder } from '../../lib/pos/posOrderToBillOrder';
+import type { BillOrder } from './BillSlipScreen';
+import { PageScroll } from '../templates/PageScroll';
 import { menuItemAvailability } from '../../lib/pos/selectors';
 import { computeOrderPricing } from '../../lib/pos/promotionPricing';
+import { CategoryFilter } from '../molecules/CategoryFilter';
+import { useMenuCategories } from '../../hooks/useCategoryList';
 
 type CartItem = MenuItem & { qty: number };
 
 const MENU_PAGE_SIZE = 12;
 
 type Props = {
-  /** Completes sale, opens receipt, and triggers print (single action). */
-  onCharge: (order: BillOrder) => void;
+  /** Order sent — show & print customer bill (amount due), then collect payment later. */
+  onOrderCreated: (bill: BillOrder, orderId: string) => void;
 };
 
 function serviceChannelLabel(c: ServiceChannel): string {
@@ -27,7 +31,7 @@ function serviceChannelLabel(c: ServiceChannel): string {
   return 'Delivery';
 }
 
-export function POSScreen({ onCharge }: Props) {
+export function POSScreen({ onOrderCreated }: Props) {
   const { formatMoney } = useAppSettings();
   const { state, actions } = usePos();
   const { actions: kitchenActions } = useKitchen();
@@ -41,8 +45,8 @@ export function POSScreen({ onCharge }: Props) {
   const [deliveryPhone, setDeliveryPhone] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryNotes, setDeliveryNotes] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('Card');
-  const [chargeError, setChargeError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [orderSent, setOrderSent] = useState(false);
   const [selectedPromotionId, setSelectedPromotionId] = useState<string>('');
   const [menuSearch, setMenuSearch] = useState('');
   const [menuPage, setMenuPage] = useState(1);
@@ -84,7 +88,7 @@ export function POSScreen({ onCharge }: Props) {
     return 'Delivery';
   }, [serviceChannel, table, pickupName, deliveryContactName, deliveryAddress]);
 
-  const POS_CATEGORIES = ['All', ...Array.from(new Set(state.menu.map(m => m.category)))];
+  const { categories: menuCategories, addCategory: addMenuCategory } = useMenuCategories(state.menu);
   const filtered = useMemo(() => {
     const base = (activeCategory === 'All' ? state.menu : state.menu.filter(i => i.category === activeCategory))
       .filter(mi => menuItemAvailability(state, mi) !== 'out_of_stock');
@@ -117,7 +121,7 @@ export function POSScreen({ onCharge }: Props) {
   };
 
   const addToCart = (item: MenuItem) => {
-    setChargeError(null);
+    setSubmitError(null);
     setCart(prev => {
       const existing = prev.find(c => c.id === item.id);
       if (existing) return prev.map(c => c.id === item.id ? { ...c, qty: c.qty + 1 } : c);
@@ -126,17 +130,16 @@ export function POSScreen({ onCharge }: Props) {
   };
 
   const updateQty = (id: string, delta: number) => {
-    setChargeError(null);
+    setSubmitError(null);
     setCart(prev => prev.map(c => c.id === id ? { ...c, qty: c.qty + delta } : c).filter(c => c.qty > 0));
   };
 
-  const handleCharge = () => {
+  const handleCreateOrder = () => {
     if (cart.length === 0) return;
-    setChargeError(null);
+    setSubmitError(null);
 
     const result = actions.orders.place({
       table,
-      paymentMethod,
       items: cart.map(c => ({ menuItemId: c.id, qty: c.qty })),
       taxRate: 0.1,
       promotionId: selectedPromotionId || null,
@@ -158,7 +161,7 @@ export function POSScreen({ onCharge }: Props) {
     });
 
     if (!result || typeof result.ok !== 'boolean') {
-      setChargeError('Unexpected response from the register. Please reload the page.');
+      setSubmitError('Unexpected response from the register. Please reload the page.');
       return;
     }
 
@@ -172,7 +175,7 @@ export function POSScreen({ onCharge }: Props) {
         );
         msg = `${msg} ${lines.join(' · ')}. Restock in Inventory or use Settings to reset demo data.`;
       }
-      setChargeError(msg);
+      setSubmitError(msg);
       return;
     }
 
@@ -184,27 +187,10 @@ export function POSScreen({ onCharge }: Props) {
       items: cart.map((c) => ({ name: c.name, qty: c.qty, category: c.category })),
     });
 
-    const order: BillOrder = {
-      id: result.order.id,
-      table: result.order.table,
-      items: cart.map((c, idx) => ({ id: idx, name: c.name, price: c.price, qty: c.qty })),
-      grossSubtotal: result.order.grossSubtotal,
-      discountTotal: result.order.discountTotal,
-      subtotal: result.order.subtotal,
-      tax: result.order.tax,
-      total: result.order.total,
-      promotionSummary: result.order.promotionName,
-      paymentMethod,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      serviceChannel: result.order.serviceChannel,
-      customerName: result.order.customerName,
-      customerPhone: result.order.customerPhone,
-      deliveryAddress: result.order.deliveryAddress,
-      deliveryNotes: result.order.deliveryNotes,
-    };
-
-    onCharge(order);
-    setCart([]); // Clear cart after charging
+    setCart([]);
+    setOrderSent(true);
+    const customerBill = posOrderToBillOrder(result.order, { billKind: 'customer_due' });
+    onOrderCreated(customerBill, result.order.id);
   };
 
   const fieldClass =
@@ -212,7 +198,8 @@ export function POSScreen({ onCharge }: Props) {
   const labelClass = 'text-xs font-bold text-on-surface mb-1.5 block tracking-wide';
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-full overflow-x-hidden">
+    <PageScroll className="overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row">
 
       {/* ── Menu / items (primary) ── */}
       <div className="flex-1 flex flex-col min-w-0">
@@ -221,29 +208,22 @@ export function POSScreen({ onCharge }: Props) {
           <div className="min-w-0">
             <h1 className="text-lg sm:text-xl font-bold font-headline text-on-surface">Point of Sale</h1>
             <p className="text-sm text-on-surface-variant mt-1 leading-snug max-w-xl">
-              Tap items to add. Service type, table, and payment are on the order column (right on large screens, below on phones).
+              Tap items to add and send to kitchen. A customer bill prints showing the amount to pay.
             </p>
           </div>
         </div>
 
-        <div className="flex gap-2 px-4 sm:px-6 py-2.5 border-b border-outline-variant overflow-x-auto shrink-0">
-          {POS_CATEGORIES.map(cat => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => {
-                setActiveCategory(cat);
-                setMenuPage(1);
-              }}
-              className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap ${
-                activeCategory === cat
-                  ? 'bg-primary text-on-primary-container shadow-sm'
-                  : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface border border-outline-variant'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="px-4 sm:px-6 py-2.5 border-b border-outline-variant shrink-0">
+          <CategoryFilter
+            categories={['All', ...menuCategories]}
+            active={activeCategory}
+            onChange={(cat) => {
+              setActiveCategory(cat);
+              setMenuPage(1);
+            }}
+            onAddCategory={addMenuCategory}
+            addModalTitle="Add menu category"
+          />
         </div>
 
         <div className="shrink-0 px-4 sm:px-6 py-2.5 border-b border-outline-variant bg-surface-container-low/40">
@@ -353,7 +333,6 @@ export function POSScreen({ onCharge }: Props) {
 
       {/* ── Order & checkout (readable width, scroll + fixed footer) ── */}
       <div className="flex flex-col border-t lg:border-t-0 lg:border-l border-outline-variant bg-surface-container-low lg:w-[min(100%,26rem)] xl:w-[28rem] 2xl:w-[30rem] shrink-0 lg:max-w-[40vw]">
-        <div className="flex-1 flex flex-col">
           <div>
             <div className="p-4 sm:p-5 space-y-5 border-b border-outline-variant/80 bg-surface-container-low">
               <div>
@@ -370,7 +349,7 @@ export function POSScreen({ onCharge }: Props) {
                       key={id}
                       type="button"
                       onClick={() => {
-                        setChargeError(null);
+                        setSubmitError(null);
                         setServiceChannel(id);
                       }}
                       className={`flex flex-col items-center justify-center gap-1.5 py-3 px-1 rounded-xl text-xs font-bold border-2 transition-all min-h-[4.25rem] ${
@@ -392,7 +371,7 @@ export function POSScreen({ onCharge }: Props) {
                   <select
                     id="pos-table"
                     value={table}
-                    onChange={e => { setChargeError(null); setTable(e.target.value); }}
+                    onChange={e => { setSubmitError(null); setTable(e.target.value); }}
                     className={fieldClass}
                   >
                     {['Table 1', 'Table 2', 'Table 5', 'Table 7', 'Table 10', 'Bar'].map(t => (
@@ -409,7 +388,7 @@ export function POSScreen({ onCharge }: Props) {
                     <input
                       id="pos-pickup-name"
                       value={pickupName}
-                      onChange={e => { setChargeError(null); setPickupName(e.target.value); }}
+                      onChange={e => { setSubmitError(null); setPickupName(e.target.value); }}
                       placeholder="Guest or ticket name"
                       className={fieldClass}
                       autoComplete="name"
@@ -420,7 +399,7 @@ export function POSScreen({ onCharge }: Props) {
                     <input
                       id="pos-pickup-phone"
                       value={pickupPhone}
-                      onChange={e => { setChargeError(null); setPickupPhone(e.target.value); }}
+                      onChange={e => { setSubmitError(null); setPickupPhone(e.target.value); }}
                       placeholder="SMS when ready"
                       className={fieldClass}
                       inputMode="tel"
@@ -436,7 +415,7 @@ export function POSScreen({ onCharge }: Props) {
                     <input
                       id="pos-del-name"
                       value={deliveryContactName}
-                      onChange={e => { setChargeError(null); setDeliveryContactName(e.target.value); }}
+                      onChange={e => { setSubmitError(null); setDeliveryContactName(e.target.value); }}
                       placeholder="Recipient"
                       className={fieldClass}
                     />
@@ -446,7 +425,7 @@ export function POSScreen({ onCharge }: Props) {
                     <input
                       id="pos-del-phone"
                       value={deliveryPhone}
-                      onChange={e => { setChargeError(null); setDeliveryPhone(e.target.value); }}
+                      onChange={e => { setSubmitError(null); setDeliveryPhone(e.target.value); }}
                       placeholder="Required"
                       className={fieldClass}
                       inputMode="tel"
@@ -457,7 +436,7 @@ export function POSScreen({ onCharge }: Props) {
                     <textarea
                       id="pos-del-addr"
                       value={deliveryAddress}
-                      onChange={e => { setChargeError(null); setDeliveryAddress(e.target.value); }}
+                      onChange={e => { setSubmitError(null); setDeliveryAddress(e.target.value); }}
                       placeholder="Street, unit, city"
                       rows={3}
                       className={`${fieldClass} resize-y min-h-[5rem]`}
@@ -468,7 +447,7 @@ export function POSScreen({ onCharge }: Props) {
                     <input
                       id="pos-del-notes"
                       value={deliveryNotes}
-                      onChange={e => { setChargeError(null); setDeliveryNotes(e.target.value); }}
+                      onChange={e => { setSubmitError(null); setDeliveryNotes(e.target.value); }}
                       placeholder="Gate code, allergies…"
                       className={fieldClass}
                     />
@@ -538,15 +517,14 @@ export function POSScreen({ onCharge }: Props) {
               )}
             </div>
           </div>
-        </div>
 
-        <div className="shrink-0 border-t-2 border-primary/30 bg-surface-container-highest p-4 sm:p-5 space-y-4 shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
+        <div className="border-t-2 border-primary/30 bg-surface-container-highest p-4 sm:p-5 space-y-4 shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
           <div>
             <label htmlFor="pos-deal" className={labelClass}>Deal (optional)</label>
             <select
               id="pos-deal"
               value={selectedPromotionId}
-              onChange={e => { setChargeError(null); setSelectedPromotionId(e.target.value); }}
+              onChange={e => { setSubmitError(null); setSelectedPromotionId(e.target.value); }}
               className={fieldClass}
             >
               <option value="">No deal</option>
@@ -583,45 +561,30 @@ export function POSScreen({ onCharge }: Props) {
             </div>
           </div>
 
-          <div>
-            <p className={labelClass}>Payment</p>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { icon: CreditCard, label: 'Card' },
-                { icon: Banknote, label: 'Cash' },
-                { icon: Smartphone, label: 'Tap' },
-              ].map(({ icon: Icon, label }) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => setPaymentMethod(label)}
-                  className={`flex flex-col items-center gap-2 py-3.5 border-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-all ${
-                    paymentMethod === label
-                      ? 'bg-primary/15 text-primary border-primary/50'
-                      : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface border-outline-variant'
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <p className="text-xs text-on-surface-variant leading-relaxed">
+            Payment (cash, card, tap) is collected on <span className="font-semibold text-primary">Receive Payment</span> after the guest is ready.
+          </p>
 
           <button
             type="button"
             disabled={cart.length === 0}
-            onClick={handleCharge}
+            onClick={handleCreateOrder}
             className="w-full py-3.5 bg-primary text-on-primary-container font-black text-base rounded-xl hover:brightness-105 active:scale-[0.99] transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg uppercase tracking-wide flex items-center justify-center gap-2"
           >
-            <Printer className="w-5 h-5 shrink-0" aria-hidden />
-            Charge and print {formatMoney(total)}
+            <SendHorizonal className="w-5 h-5 shrink-0" aria-hidden />
+            Send order & print bill · {formatMoney(total)}
           </button>
-          {chargeError && (
-            <p className="text-sm text-error font-semibold leading-snug bg-error/10 border border-error/30 rounded-xl px-3 py-2">{chargeError}</p>
+          {orderSent && (
+            <p className="text-sm text-secondary font-semibold bg-secondary/10 border border-secondary/30 rounded-xl px-3 py-2">
+              Order sent — customer bill printed. Collect payment on Receive Payment when ready.
+            </p>
+          )}
+          {submitError && (
+            <p className="text-sm text-error font-semibold leading-snug bg-error/10 border border-error/30 rounded-xl px-3 py-2">{submitError}</p>
           )}
         </div>
       </div>
     </div>
+    </PageScroll>
   );
 }

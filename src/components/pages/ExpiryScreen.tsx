@@ -6,10 +6,12 @@ import { useAppSettings } from '../../lib/appSettings';
 import { Badge } from '../atoms/Badge';
 import { Button } from '../atoms/Button';
 import { StatCard } from '../molecules/StatCard';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import { SearchBar } from '../molecules/SearchBar';
 import { CategoryFilter } from '../molecules/CategoryFilter';
 import { Pagination } from '../molecules/Pagination';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 import { getExpiryStatus, expiryLabel, daysUntilExpiry, type ExpiryStatus } from '../../lib/pos/expiry';
 import type { InventoryItem } from '../../lib/pos/types';
 
@@ -107,7 +109,7 @@ export function ExpiryScreen() {
   const paginatedData = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
-    <div className="p-4 sm:p-6 space-y-5 overflow-y-auto min-h-full">
+    <PageScroll className="p-4 sm:p-6 space-y-5">
       <PageHeader
         title="Expiry Management"
         subtitle="Track product expiry dates and manage inventory freshness."
@@ -129,8 +131,7 @@ export function ExpiryScreen() {
         }
       />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <CollapsibleStatsPanel title="Expiry overview" storageKey="pos-stats-expiry">
         <StatCard
           label="Expired"
           value={expiredCount}
@@ -145,7 +146,7 @@ export function ExpiryScreen() {
         />
         <StatCard label="Fresh" value={freshCount} icon={<CheckCircle2 className="w-4 h-4" />} />
         <StatCard label="No Date Set" value={noDateCount} icon={<Clock className="w-4 h-4" />} />
-      </div>
+      </CollapsibleStatsPanel>
 
       {/* Filters */}
       <div className="flex items-center gap-3 flex-wrap">
@@ -341,6 +342,6 @@ export function ExpiryScreen() {
           )}
         </div>
       )}
-    </div>
+    </PageScroll>
   );
 }

@@ -1,5 +1,6 @@
 export { DashboardScreen } from './DashboardScreen';
 export { POSScreen } from './POSScreen';
+export { ReceivePaymentScreen } from './ReceivePaymentScreen';
 export { OrdersScreen } from './OrdersScreen';
 export { MenuScreen } from './MenuScreen';
 export { TablesScreen } from './TablesScreen';

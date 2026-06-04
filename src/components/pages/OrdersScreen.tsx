@@ -11,6 +11,8 @@ import { useAppSettings } from '../../lib/appSettings';
 import { usePos } from '../../lib/pos/store';
 import type { Order as PosOrder } from '../../lib/pos/types';
 import { getLatestPosOrder, posOrderToBillOrder } from '../../lib/pos/posOrderToBillOrder';
+import { isOrderPending, isOrderPaid } from '../../lib/pos/orderPayment';
+import { PageScroll } from '../templates/PageScroll';
 
 const ORDER_STATUSES = ['All', 'Pending', 'Preparing', 'Ready', 'Served', 'Cancelled'] as const;
 
@@ -28,8 +30,9 @@ type Props = {
   onPrintReceipt: (order: BillOrder) => void;
 };
 
-/** POS charges are paid immediately — show as completed for the floor list. */
-function posOrderUiStatus(_o: PosOrder): string {
+function posOrderUiStatus(o: PosOrder): string {
+  if (isOrderPending(o)) return 'Pending';
+  if (isOrderPaid(o)) return 'Served';
   return 'Served';
 }
 
@@ -86,8 +89,9 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
   const paginatedData = filtered.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-full overflow-x-hidden">
-      <div className={`flex-1 flex-col overflow-hidden lg:border-r border-outline-variant ${selectedId ? 'hidden lg:flex' : 'flex'}`}>
+    <PageScroll className="overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row lg:min-h-full">
+      <div className={`flex-1 flex flex-col lg:border-r border-outline-variant ${selectedId ? 'hidden lg:flex' : 'flex'}`}>
         <div className="p-6 pb-4 border-b border-outline-variant">
           <PageHeader
             title="Live Orders"
@@ -101,8 +105,8 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
           />
         </div>
 
-        <div className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div className="flex flex-col">
+          <div className="p-4 space-y-2">
             {paginatedData.map((row, i) => {
               const { order, status } = row;
               const cfg = statusConfig[status] ?? statusConfig.Served;
@@ -128,7 +132,7 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
                         <span className="text-[10px] text-on-surface-variant font-mono">{order.id}</span>
                       </div>
                       <p className="text-xs text-on-surface-variant mt-0.5">
-                        {order.paymentMethod} · {formatListTime(order.createdAtIso)}
+                        {isOrderPending(order) ? 'Awaiting payment' : order.paymentMethod || 'Paid'} · {formatListTime(order.createdAtIso)}
                       </p>
                     </div>
                     <Badge
@@ -149,7 +153,7 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
             {filtered.length === 0 && (
               <p className="text-center text-sm text-on-surface-variant py-10">
                 {orders.length === 0
-                  ? 'No orders yet — charge a sale in Point of Sale to see it here.'
+                  ? 'No orders yet — send an order from Point of Sale to see it here.'
                   : 'No orders match your filter.'}
               </p>
             )}
@@ -197,7 +201,7 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
               />
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+            <div className="p-4 space-y-3">
               <div className="bg-surface-container-high rounded-xl p-4 space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Order Items</p>
                 {selected.items.map((item, idx) => (
@@ -216,7 +220,9 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Payment</span>
-                  <span className="text-on-surface font-medium">{selected.paymentMethod}</span>
+                  <span className="text-on-surface font-medium">
+                    {isOrderPending(selected) ? 'Unpaid' : selected.paymentMethod || 'Paid'}
+                  </span>
                 </div>
                 {(selected.discountTotal ?? 0) > 0.005 && (
                   <div className="flex justify-between text-sm text-secondary font-semibold">
@@ -261,5 +267,6 @@ export function OrdersScreen({ onPrintReceipt }: Props) {
         )}
       </div>
     </div>
+    </PageScroll>
   );
 }

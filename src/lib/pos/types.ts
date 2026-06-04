@@ -50,11 +50,18 @@ export type OrderItem = {
 /** Where / how the guest is being served (POS + dining views). */
 export type ServiceChannel = 'dine_in' | 'takeaway' | 'delivery';
 
+export type PaymentStatus = 'pending' | 'paid';
+
 export type Order = {
   id: string;
   createdAtIso: string;
   /** Short label for receipt / floor (e.g. "Table 7", "Takeaway · Ali", "Delivery · Sam"). */
   table: string;
+  /** Unpaid until collected on Receive Payment. Legacy orders without status count as paid. */
+  paymentStatus?: PaymentStatus;
+  paidAtIso?: string | null;
+  /** Cash tendered (when paymentMethod is Cash). */
+  amountTendered?: number | null;
   paymentMethod: string;
   items: OrderItem[];
   /** Sum of line extensions at list price (before promotion). */
@@ -130,7 +137,6 @@ export type PosStateV1 = {
 
 export type PlaceOrderInput = {
   table: string;
-  paymentMethod: string;
   items: Array<{ menuItemId: string; qty: number }>;
   taxRate?: number;
   promotionId?: string | null;
@@ -139,5 +145,11 @@ export type PlaceOrderInput = {
   customerPhone?: string;
   deliveryAddress?: string;
   deliveryNotes?: string;
+};
+
+export type ReceivePaymentInput = {
+  orderId: string;
+  paymentMethod: string;
+  amountTendered?: number;
 };
 

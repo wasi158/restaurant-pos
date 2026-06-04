@@ -18,6 +18,7 @@ import { VendorsScreen } from './components/pages/VendorsScreen';
 import { DealsScreen } from './components/pages/DealsScreen';
 import { BillSlipScreen, BillOrder } from './components/pages/BillSlipScreen';
 import { ExpiryScreen } from './components/pages/ExpiryScreen';
+import { ReceivePaymentScreen } from './components/pages/ReceivePaymentScreen';
 import { motion, AnimatePresence } from 'motion/react';
 import { printReceipt } from './lib/printReceipt';
 
@@ -27,6 +28,7 @@ export default function App() {
   const [currentOrder, setCurrentOrder]     = useState<BillOrder | null>(null);
   const [billAutoPrint, setBillAutoPrint]   = useState(false);
   const [sidebarOpen, setSidebarOpen]       = useState(false);
+  const [paymentHighlightId, setPaymentHighlightId] = useState<string | null>(null);
   const showBillSlip = (order: BillOrder, opts?: { autoPrint?: boolean }) => {
     setCurrentOrder(order);
     setBillAutoPrint(opts?.autoPrint ?? false);
@@ -55,7 +57,21 @@ export default function App() {
       case 'dashboard': return <DashboardScreen onNavigate={setActiveTab} />;
       case 'orders':    return <OrdersScreen onPrintReceipt={(order) => showBillSlip(order, { autoPrint: true })} />;
       case 'menu':      return <MenuScreen />;
-      case 'tables':    return <TablesScreen onGoToPos={() => setActiveTab('pos')} />;
+      case 'tables':    return (
+        <TablesScreen
+          onGoToPos={() => setActiveTab('pos')}
+          onGoToReceivePayment={() => setActiveTab('receive-payment')}
+        />
+      );
+      case 'receive-payment': return (
+        <ReceivePaymentScreen
+          highlightOrderId={paymentHighlightId}
+          onPaymentComplete={(order) => {
+            setPaymentHighlightId(null);
+            showBillSlip({ ...order, billKind: 'paid' }, { autoPrint: true });
+          }}
+        />
+      );
       case 'inventory': return <InventoryScreen />;
       case 'vendors':   return <VendorsScreen />;
       case 'deals':     return <DealsScreen />;
@@ -68,7 +84,12 @@ export default function App() {
       case 'kitchen':   return <KitchenScreen />;
       case 'expiry':    return <ExpiryScreen />;
       case 'pos':       return (
-        <POSScreen onCharge={(order) => showBillSlip(order, { autoPrint: true })} />
+        <POSScreen
+          onOrderCreated={(bill, orderId) => {
+            setPaymentHighlightId(orderId);
+            showBillSlip(bill, { autoPrint: true });
+          }}
+        />
       );
       case 'bill-slip': return (
         <BillSlipScreen
@@ -78,6 +99,11 @@ export default function App() {
             setBillAutoPrint(false);
             setActiveTab('pos');
           }}
+          onReceivePayment={
+            currentOrder?.billKind === 'customer_due'
+              ? () => setActiveTab('receive-payment')
+              : undefined
+          }
         />
       );
       default:          return <DashboardScreen />;
@@ -93,10 +119,13 @@ export default function App() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <main className="flex-1 flex flex-col relative overflow-hidden min-w-0">
+      <main className="flex-1 flex flex-col relative overflow-hidden min-w-0 min-h-0">
         <TopBar theme={theme} toggleTheme={toggleTheme} onMenuClick={() => setSidebarOpen(true)} />
 
-        <div className="flex-1 overflow-y-auto relative">
+        <div
+          id="app-page-scroll"
+          className="flex-1 min-h-0 h-0 overflow-y-auto overflow-x-hidden relative overscroll-y-contain"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -104,7 +133,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="min-h-full w-full"
+              className="w-full min-h-full"
             >
               {renderScreen()}
             </motion.div>

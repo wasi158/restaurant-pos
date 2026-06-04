@@ -12,6 +12,7 @@ import { Pagination } from '../molecules/Pagination';
 import { ModalShell } from '../organisms/ModalShell';
 import { ConfirmDialog } from '../organisms/ConfirmDialog';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 
 type ShiftStatus = 'on-shift' | 'off-duty' | 'on-break';
 type StaffMember = {
@@ -80,7 +81,7 @@ export function StaffScreen() {
   };
 
   return (
-    <div className="p-4 sm:p-6 space-y-5 overflow-y-auto min-h-full">
+    <PageScroll className="p-4 sm:p-6 space-y-5">
       <PageHeader
         title="Staff Management"
         subtitle={`${onShift} active on shift · ${staff.length} total`}
@@ -235,6 +236,6 @@ export function StaffScreen() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </PageScroll>
   );
 }

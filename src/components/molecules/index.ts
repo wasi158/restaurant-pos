@@ -1,6 +1,9 @@
 export { SearchBar } from './SearchBar';
 export { StatCard } from './StatCard';
+export { CollapsibleStatsPanel } from './CollapsibleStatsPanel';
 export { FormField } from './FormField';
 export { EmptyState } from './EmptyState';
 export { CategoryFilter } from './CategoryFilter';
+export { CategorySelectField } from './CategorySelectField';
+export { AddCategoryModal } from './AddCategoryModal';
 export { Pagination } from './Pagination';

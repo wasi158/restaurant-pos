@@ -8,7 +8,9 @@ import { usePos } from '../../lib/pos/store';
 import { Button } from '../atoms/Button';
 import { Badge } from '../atoms/Badge';
 import { StatCard } from '../molecules/StatCard';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 import { getExpiryStatus, getExpiringItems } from '../../lib/pos/expiry';
 
 const STAT_ICONS = [DollarSign, Users, TrendingUp, Timer] as const;
@@ -80,7 +82,7 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
   }, [period]);
 
   return (
-    <div className="p-4 sm:p-6 space-y-6 overflow-y-auto min-h-full">
+    <PageScroll className="p-4 sm:p-6 space-y-6">
       <PageHeader
         title="Service Overview"
         subtitle="Real-time metrics for the current shift."
@@ -149,8 +151,11 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
         </motion.div>
       )}
 
-      {/* KPI cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <CollapsibleStatsPanel
+        title="Key metrics"
+        storageKey="pos-stats-dashboard"
+        gridClassName="grid grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         {displayStats.map((s, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}>
             <StatCard
@@ -163,7 +168,7 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             />
           </motion.div>
         ))}
-      </div>
+      </CollapsibleStatsPanel>
 
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -273,7 +278,11 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
               </div>
               <span className="text-[11px] font-bold text-error">22m avg prep</span>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <CollapsibleStatsPanel
+              title="Ticket counts"
+              storageKey="pos-stats-dashboard-kitchen"
+              gridClassName="grid grid-cols-3 gap-3"
+            >
               {[
                 { label: 'Active Tickets', value: '14', color: 'text-on-surface' },
                 { label: 'Delayed',        value: '2',  color: 'text-error' },
@@ -284,10 +293,10 @@ export function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                   <p className="text-[10px] text-on-surface-variant mt-0.5">{s.label}</p>
                 </div>
               ))}
-            </div>
+            </CollapsibleStatsPanel>
           </div>
         </div>
       </div>
-    </div>
+    </PageScroll>
   );
 }

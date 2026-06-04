@@ -2,7 +2,7 @@
   "name": "restaurant-pos",
   "productName": "Restaurant POS",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "lint": "tsc --noEmit",
     "electron:build": "npm run build && npm run build:electron && electron-builder",
     "electron:build:win": "npm run build && npm run build:electron && electron-builder --win",
+    "electron:build:win:fresh": "node scripts/clean-release.mjs && npm run electron:build:win",
     "electron:build:mac": "npm run build && npm run build:electron && electron-builder --mac",
     "electron:build:linux": "npm run build && npm run build:electron && electron-builder --linux"
   },

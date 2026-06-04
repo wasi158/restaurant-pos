@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Plus, Pencil, Trash2, AlertTriangle, XCircle, CheckCircle2 } from 'lucide-react';
-import menuData from '../../mock/menu.json';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { Select } from '../atoms/Select';
+import { CategorySelectField } from '../molecules/CategorySelectField';
 import { Badge } from '../atoms/Badge';
 import { SearchBar } from '../molecules/SearchBar';
 import { StatCard } from '../molecules/StatCard';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import { FormField } from '../molecules/FormField';
 import { CategoryFilter } from '../molecules/CategoryFilter';
 import { Pagination } from '../molecules/Pagination';
 import { ModalShell } from '../organisms/ModalShell';
 import { ConfirmDialog } from '../organisms/ConfirmDialog';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
 import { usePos } from '../../lib/pos/store';
 import { useAppSettings } from '../../lib/appSettings';
 import type { MenuItem } from '../../lib/pos/types';
 import { menuItemAvailability } from '../../lib/pos/selectors';
-
-const MENU_CATEGORIES: string[] = menuData.categories;
+import { useMenuCategories } from '../../hooks/useCategoryList';
 
 const statusCfg: Record<string, { variant: 'success' | 'warning' | 'error'; icon: React.ElementType; label: string }> = {
   in_stock:     { variant: 'success', icon: CheckCircle2, label: 'In Stock' },
@@ -27,10 +28,12 @@ const statusCfg: Record<string, { variant: 'success' | 'warning' | 'error'; icon
   out_of_stock: { variant: 'error',   icon: XCircle,       label: 'Out of Stock' },
 };
 
-function MenuFormModal({ title, onClose, onSave, form, setForm, recipeOptions }: {
+function MenuFormModal({ title, onClose, onSave, form, setForm, recipeOptions, menuCategories, onAddCategory }: {
   title: string; onClose: () => void; onSave: () => void;
   form: Omit<MenuItem, 'id'>; setForm: (f: Omit<MenuItem, 'id'>) => void;
   recipeOptions: Array<{ value: string; label: string }>;
+  menuCategories: string[];
+  onAddCategory: (name: string) => { ok: true; name: string } | { ok: false; reason: string };
 }) {
   const { currency } = useAppSettings();
   return (
@@ -40,7 +43,14 @@ function MenuFormModal({ title, onClose, onSave, form, setForm, recipeOptions }:
           <Input value={form.name} onChange={(v) => setForm({ ...form, name: v })} placeholder="e.g. Wagyu Burger" fullWidth />
         </FormField>
         <FormField label="Category">
-          <Select value={form.category} onChange={(v) => setForm({ ...form, category: v })} options={MENU_CATEGORIES} fullWidth />
+          <CategorySelectField
+            value={form.category}
+            onChange={(v) => setForm({ ...form, category: v })}
+            categories={menuCategories}
+            onAddCategory={onAddCategory}
+            fullWidth
+            addModalTitle="Add menu category"
+          />
         </FormField>
         <FormField label={`Price (${currency})`}>
           <Input type="number" min="0" step="0.01" value={form.price || ''} onChange={(v) => setForm({ ...form, price: parseFloat(v) || 0 })} placeholder="0.00" fullWidth />
@@ -60,6 +70,7 @@ export function MenuScreen() {
   const { formatMoney } = useAppSettings();
   const { state, actions } = usePos();
   const items = state.menu;
+  const { categories: menuCategories, addCategory: addMenuCategory } = useMenuCategories(items);
   const recipes = state.recipes;
   const [search, setSearch] = useState('');
   const [catFilter, setCatFilter] = useState('All');
@@ -103,7 +114,7 @@ export function MenuScreen() {
   const outStock = items.filter(i => menuItemAvailability(state, i) === 'out_of_stock').length;
 
   return (
-    <div className="p-4 sm:p-6 space-y-5 overflow-y-auto min-h-full">
+    <PageScroll className="p-4 sm:p-6 space-y-5">
       <PageHeader
         title="Menu Management"
         subtitle={`${items.length} items · manage availability, pricing and ingredients`}
@@ -112,15 +123,25 @@ export function MenuScreen() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <CollapsibleStatsPanel
+        title="Menu availability"
+        storageKey="pos-stats-menu"
+        gridClassName="grid grid-cols-1 sm:grid-cols-3 gap-4"
+      >
         <StatCard label="In Stock" value={inStock} icon={<CheckCircle2 className="w-4 h-4" />} />
         <StatCard label="Low Stock" value={lowStock} icon={<AlertTriangle className="w-4 h-4" />} />
         <StatCard label="Out of Stock" value={outStock} icon={<XCircle className="w-4 h-4" />} />
-      </div>
+      </CollapsibleStatsPanel>
 
       <div className="flex items-center gap-3 flex-wrap">
         <SearchBar value={search} onChange={setSearch} placeholder="Search items…" className="w-52" />
-        <CategoryFilter categories={['All', ...MENU_CATEGORIES]} active={catFilter} onChange={setCatFilter} />
+        <CategoryFilter
+          categories={['All', ...menuCategories]}
+          active={catFilter}
+          onChange={setCatFilter}
+          onAddCategory={addMenuCategory}
+          addModalTitle="Add menu category"
+        />
       </div>
 
       <div className="bg-surface-container-low rounded-2xl border border-outline-variant overflow-hidden overflow-x-auto">
@@ -195,7 +216,16 @@ export function MenuScreen() {
 
       <AnimatePresence>
         {(modal === 'add' || modal === 'edit') && (
-          <MenuFormModal title={modal === 'add' ? 'Add New Item' : 'Edit Item'} onClose={() => setModal(null)} onSave={handleSave} form={form} setForm={setForm} recipeOptions={recipeOptions} />
+          <MenuFormModal
+            title={modal === 'add' ? 'Add New Item' : 'Edit Item'}
+            onClose={() => setModal(null)}
+            onSave={handleSave}
+            form={form}
+            setForm={setForm}
+            recipeOptions={recipeOptions}
+            menuCategories={menuCategories}
+            onAddCategory={addMenuCategory}
+          />
         )}
         {deleteTarget && (
           <ConfirmDialog
@@ -206,6 +236,6 @@ export function MenuScreen() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </PageScroll>
   );
 }

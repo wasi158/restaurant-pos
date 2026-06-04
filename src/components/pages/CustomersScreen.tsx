@@ -14,6 +14,8 @@ import { Pagination } from '../molecules/Pagination';
 import { ModalShell } from '../organisms/ModalShell';
 import { ConfirmDialog } from '../organisms/ConfirmDialog';
 import { PageHeader } from '../organisms/PageHeader';
+import { PageScroll } from '../templates/PageScroll';
+import { CollapsibleStatsPanel } from '../molecules/CollapsibleStatsPanel';
 import { useAppSettings } from '../../lib/appSettings';
 
 type Tier = 'VIP' | 'Regular' | 'New';
@@ -134,9 +136,9 @@ export function CustomersScreen() {
   const pts = Math.min((selected.spend * 0.1), 1000);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-full overflow-x-hidden">
-      {/* Left */}
-      <div className="flex-1 flex flex-col overflow-hidden lg:border-r border-outline-variant">
+    <PageScroll className="overflow-x-hidden">
+    <div className="flex flex-col lg:flex-row lg:min-h-full">
+      <div className="flex-1 flex flex-col lg:border-r border-outline-variant">
         <div className="p-5 border-b border-outline-variant">
           <PageHeader
             title="Customers"
@@ -149,7 +151,12 @@ export function CustomersScreen() {
             className="mb-3"
           />
 
-          <div className="grid grid-cols-3 gap-2 mb-3">
+          <CollapsibleStatsPanel
+            title="Guest stats"
+            storageKey="pos-stats-customers"
+            gridClassName="grid grid-cols-3 gap-2"
+            className="mb-3"
+          >
             {[
               { label: 'Total Spend',  value: formatMoney(totalSpend), icon: DollarSign },
               { label: 'Total Visits', value: totalVisits,             icon: Calendar   },
@@ -163,7 +170,7 @@ export function CustomersScreen() {
                 </div>
               </div>
             ))}
-          </div>
+          </CollapsibleStatsPanel>
 
           <div className="flex items-center gap-2 flex-wrap">
             <SearchBar value={search} onChange={setSearch} placeholder="Search guests…" className="flex-1 min-w-[140px]" />
@@ -171,8 +178,8 @@ export function CustomersScreen() {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
+        <div className="flex flex-col">
+          <div className="p-3 space-y-1.5">
             <AnimatePresence>
               {paginatedData.map((c) => {
               const Icon = tierIcon[c.tier];
@@ -237,7 +244,7 @@ export function CustomersScreen() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="p-4 space-y-3">
           <div className="bg-surface-container-high rounded-xl p-4 space-y-2.5 border border-outline-variant">
             <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Contact</p>
             <div className="flex items-center gap-2 text-sm">
@@ -301,5 +308,6 @@ export function CustomersScreen() {
         )}
       </AnimatePresence>
     </div>
+    </PageScroll>
   );
 }
