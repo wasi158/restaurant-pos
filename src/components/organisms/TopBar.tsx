@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Search, Bell, Sun, Moon, Cloud, Minus, Square, X, Check, Menu } from 'lucide-react';
+import { Search, Bell, Sun, Moon, Cloud, Check, Menu } from 'lucide-react';
 import { useElectron } from '../../hooks/useElectron';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAppSettings } from '../../lib/appSettings';
@@ -18,7 +18,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ theme, toggleTheme, onMenuClick }: TopBarProps) {
-  const { isElectron } = useElectron();
+  const { isElectron, nativeChrome } = useElectron();
   const { currency } = useAppSettings();
   const { state } = usePos();
   const [showNotifs, setShowNotifs] = useState(false);
@@ -57,10 +57,10 @@ export function TopBar({ theme, toggleTheme, onMenuClick }: TopBarProps) {
   };
 
   return (
-    <header className="h-14 flex-none bg-surface-container-low/95 backdrop-blur-xl flex items-center justify-between px-5 border-b border-outline-variant shrink-0 z-40 drag-region">
+    <header className="relative h-14 flex-none bg-surface-container-low/95 backdrop-blur-xl flex items-center justify-between gap-2 px-4 sm:px-5 border-b border-outline-variant shrink-0 z-40 drag-region">
 
       {/* Mobile menu + Search */}
-      <div className="flex items-center gap-2 flex-1 no-drag min-w-0">
+      <div className="flex items-center gap-2 flex-1 min-w-0 no-drag">
         <button
           type="button"
           onClick={onMenuClick}
@@ -81,17 +81,17 @@ export function TopBar({ theme, toggleTheme, onMenuClick }: TopBarProps) {
         </div>
       </div>
 
-      {/* Right */}
-      <div className="flex items-center gap-2 no-drag">
+      {/* Toolbar — shrinks before window controls */}
+      <div className={`flex items-center gap-1.5 sm:gap-2 no-drag min-w-0 ${isElectron && !nativeChrome ? 'pr-28' : ''}`}>
 
         {/* Kitchen live badge */}
-        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-secondary/10 border border-secondary/25 rounded-full">
+        <div className={`${isElectron ? 'hidden xl:flex' : 'hidden sm:flex'} items-center gap-1.5 px-3 py-1.5 bg-secondary/10 border border-secondary/25 rounded-full shrink-0`}>
           <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
           <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Kitchen Live</span>
         </div>
 
         <div
-          className="hidden md:flex items-center px-2.5 py-1 rounded-lg bg-surface-container-high border border-outline-variant text-[10px] font-bold text-on-surface-variant uppercase tracking-wider"
+          className={`${isElectron ? 'hidden lg:flex' : 'hidden md:flex'} items-center px-2.5 py-1 rounded-lg bg-surface-container-high border border-outline-variant text-[10px] font-bold text-on-surface-variant uppercase tracking-wider shrink-0`}
           title={`Receipts, POS, and reports format money as ${currency}`}
         >
           {currency}
@@ -162,38 +162,27 @@ export function TopBar({ theme, toggleTheme, onMenuClick }: TopBarProps) {
           </AnimatePresence>
         </div>
 
-        <button className="w-8 h-8 flex items-center justify-center rounded-xl text-secondary hover:text-primary hover:bg-primary/15 transition-all">
-          <Cloud className="w-4 h-4" />
-        </button>
+        {!isElectron && (
+          <button type="button" className="w-8 h-8 flex items-center justify-center rounded-xl text-secondary hover:text-primary hover:bg-primary/15 transition-all shrink-0">
+            <Cloud className="w-4 h-4" />
+          </button>
+        )}
 
-        <div className="hidden md:block h-5 w-px bg-outline-variant mx-1" />
+        <div className={`${isElectron ? 'hidden lg:block' : 'hidden md:block'} h-5 w-px bg-outline-variant mx-0.5 shrink-0`} />
 
         {/* User */}
-        <div className="flex items-center gap-2.5 cursor-pointer group">
-          <div className="w-8 h-8 rounded-full ring-2 ring-primary/50 overflow-hidden">
+        <div className={`flex items-center gap-2 cursor-pointer group shrink-0 ${isElectron ? 'hidden sm:flex' : ''}`}>
+          <div className="w-8 h-8 rounded-full ring-2 ring-primary/50 overflow-hidden shrink-0">
             <img
               src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=80&h=80"
               alt="Manager"
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="hidden md:block leading-none">
+          <div className={`${isElectron ? 'hidden xl:block' : 'hidden md:block'} leading-none`}>
             <p className="text-xs font-semibold text-on-surface group-hover:text-primary transition-colors">Marcus V.</p>
             <p className="text-[10px] text-primary mt-0.5 font-medium">General Manager</p>
           </div>
-        </div>
-
-        {/* Window controls — Electron only, hidden on mobile */}
-        <div className="hidden md:flex items-center ml-1 pl-3 border-l border-outline-variant gap-0.5">
-          <button className="w-7 h-7 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">
-            <Minus className="w-3.5 h-3.5" />
-          </button>
-          <button className="w-7 h-7 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors">
-            <Square className="w-3 h-3" />
-          </button>
-          <button className="w-7 h-7 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-error/15 hover:text-error transition-colors">
-            <X className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
     </header>

@@ -7,5 +7,5 @@ release-build/
 coverage/
 .DS_Store
 *.log
-.env*
 !.env.example
+config.bat

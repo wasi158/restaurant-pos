@@ -99,7 +99,7 @@ export function BillSlipScreen({ order, onNewOrder, onReceivePayment }: Props) {
           </div>
         ) : (
           <div className="flex items-center gap-2 text-secondary font-bold text-sm text-center">
-            <CheckCircle2 className="w-5 h-5 shrink-0" />
+            <CheckCircle2 className="w-6 h-6 shrink-0" />
             Order paid successfully
           </div>
         )}
