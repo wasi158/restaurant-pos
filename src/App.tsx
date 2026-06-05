@@ -21,8 +21,11 @@ import { ExpiryScreen } from './components/pages/ExpiryScreen';
 import { ReceivePaymentScreen } from './components/pages/ReceivePaymentScreen';
 import { motion, AnimatePresence } from 'motion/react';
 import { printReceipt } from './lib/printReceipt';
+import { WindowControls } from './components/molecules/WindowControls';
+import { useElectron } from './hooks/useElectron';
 
 export default function App() {
+  const { showCustomWindowControls, maximized, setMaximized } = useElectron();
   const [activeTab, setActiveTab]           = useState('dashboard');
   const [theme, setTheme]                   = useState<'dark' | 'light'>('dark');
   const [currentOrder, setCurrentOrder]     = useState<BillOrder | null>(null);
@@ -112,6 +115,9 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-surface text-on-surface overflow-hidden font-sans selection:bg-primary/20">
+      {showCustomWindowControls && (
+        <WindowControls maximized={maximized} onMaximizedChange={setMaximized} />
+      )}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={(tab) => { setActiveTab(tab); setSidebarOpen(false); }}
